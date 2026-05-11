@@ -15,7 +15,8 @@ proxy-rules/
 │   ├── claude.list
 │   ├── google.list
 │   ├── netflix.list
-│   └── telegram.list
+│   ├── telegram.list
+│   └── surge.conf       # 生成的代理节点配置
 ├── scripts/
 │   ├── clash-verge.js   # Clash Verge 全局扩展脚本
 │   └── sub.rkt          # 从订阅链接生成 Surge 代理配置
@@ -44,13 +45,19 @@ RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/unblock
 
 ### 订阅转换
 
-编辑 `scripts/sub.rkt` 填入订阅地址，然后：
+在 `scripts/` 下创建 `.env` 文件填入订阅地址（已 gitignore）：
+
+```
+SURGE_SUB_URL=https://your-subscription-url
+```
+
+然后运行：
 
 ```bash
 racket scripts/sub.rkt
 ```
 
-输出 `surge_updated.conf`，包含代理节点和按地区分组的 proxy groups。
+输出 `surge/surge.conf`，包含代理节点和按地区分组的 proxy groups。
 
 ## 维护
 
