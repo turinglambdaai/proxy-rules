@@ -1,0 +1,40 @@
+name: Convert Rules
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'surge/**'
+      - 'scripts/convert_rules.rkt'
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: racket/setup-racket@v2
+        with:
+          version: '8.15'
+
+      - name: Run conversion
+        run: racket scripts/convert_rules.rkt
+
+      - name: Check for changes
+        id: check
+        run: |
+          if git diff --quiet clash/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add clash/
+          git commit -m "chore: auto-convert surge rules to clash format"
+          git push
