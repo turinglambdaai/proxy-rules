@@ -1,17 +1,10 @@
 #lang racket
 
 ;; 从 Surge 订阅链接提取节点，按地区分组，生成 Surge 代理配置
-(require net/http-client net/url)
+;; 订阅链接从环境变量 SURGE_SUB_URL 或脚本同目录的 .env 文件读取
+(require net/http-client net/url racket/port)
 
 ;; ============ 配置 ============
-(struct config (subscription-url output) #:transparent)
-
-(define app-config
-  (config
-   "在此处填入订阅地址"
-   "surge_updated.conf"))
-
-;; 地区映射
 (define region-map
   '(("Hong Kong" . "🇭🇰 Hong Kong")
     ("Taiwan" . "🇨🇳 Taiwan")
@@ -36,6 +29,29 @@
 ;; ============ 数据结构 ============
 (struct proxy (name config-line region) #:transparent)
 
+;; ============ 订阅链接读取 ============
+(define (load-dot-env)
+  (define env-file (build-path (find-system-path 'orig-dir) ".env"))
+  (for ([line (in-list (string-split (file->string env-file) "\n"))])
+    (define trimmed (string-trim line))
+    (when (and (> (string-length trimmed) 0)
+               (not (string-prefix? trimmed "#")))
+      (define idx (string-idx trimmed #\=))
+      (when idx
+        (define key (string-trim (substring trimmed 0 idx)))
+        (define val (string-trim (substring trimmed (+ idx 1))))
+        (when (and (> (string-length key) 0) (> (string-length val) 0))
+          (putenv key val))))))
+
+(define (string-idx str ch)
+  (for/or ([c (in-string str)] [i (in-naturals)])
+    (and (char=? c ch) i)))
+
+(define (get-subscription-url)
+  (or (getenv "SURGE_SUB_URL")
+      (begin (load-dot-env) (getenv "SURGE_SUB_URL"))
+      (error "未设置订阅地址。请设置环境变量 SURGE_SUB_URL 或在 scripts/.env 中写入 SURGE_SUB_URL=<url>")))
+
 ;; ============ HTTP ============
 (define (build-path-string path-list)
   (string-append "/" (string-join (map path/param-path path-list) "/")))
@@ -57,7 +73,7 @@
                    #:port (or (url-port url)
                               (if (string-prefix? url-string "https") 443 80))
                    #:version #"1.1"
-                   #:headers '("User-Agent: Surge/5.0.0" "Accept: */*")))
+                   #:headers '("User-Agent: Surge/5.0.0 (iPhone; iOS 18.0)" "Accept: */*")))
   (define content (port->string in))
   (close-input-port in)
   content)
@@ -126,16 +142,17 @@
   (string-join
    (append
     (list "[Proxy]")
+    (list "DIRECT = direct")
     (map proxy-config-line proxies)
     (list "" "[Proxy Group]")
-    (list (group "Proxy" "select" (cons "Auto" regions))
-          (group "Auto" "fallback" regions))
+    (list (group "Proxy" "select" (cons "DIRECT" (cons "Auto" regions)))
+          (group "Auto" "url-test" regions))
     (for/list ([svc service-groups])
-      (group svc "select" regions))
+      (group svc "select" (cons "DIRECT" regions)))
     (for/list ([r regions])
       (let* ([names (map proxy-name (hash-ref groups r))])
-        (format "~a = select, ~a" r (string-join names ", "))))))
-   "\n")
+        (format "~a = select, ~a" r (string-join names ", ")))))
+   "\n"))
 
 ;; ============ 统计 ============
 (define (print-statistics proxies)
@@ -156,15 +173,18 @@
 
 ;; ============ 主函数 ============
 (define (main)
+  (define sub-url (get-subscription-url))
+  (define output-path (build-path (find-system-path 'orig-dir) ".." "surge" "surge.conf"))
+
   (printf "========================================\n")
   (printf "Surge 订阅更新\n")
   (printf "========================================\n\n")
-  (printf "订阅地址: ~a\n\n" (config-subscription-url app-config))
+  (printf "订阅地址: ~a\n\n" sub-url)
 
   (printf "1. 正在下载订阅...\n")
   (define content
     (with-handlers ([exn:fail? (λ (e) (printf "   ✗ 错误: ~a\n" (exn-message e)) (exit 1))])
-      (fetch-url (config-subscription-url app-config))))
+      (fetch-url sub-url)))
   (printf "   ✓ 下载完成 (~a 字节)\n\n" (string-length content))
 
   (printf "2. 正在解析...\n")
@@ -177,8 +197,8 @@
 
   (printf "3. 正在生成配置...\n")
   (define output (generate-surge-config proxies))
-  (display-to-file output (config-output app-config) #:exists 'replace)
-  (printf "   ✓ 已保存到: ~a\n\n" (config-output app-config))
+  (display-to-file output output-path #:exists 'replace)
+  (printf "   ✓ 已保存到: ~a\n\n" output-path)
 
   (printf "========================================\n")
   (printf "更新完成！\n")
