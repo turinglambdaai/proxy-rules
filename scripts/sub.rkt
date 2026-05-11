@@ -133,9 +133,9 @@
     (for/list ([svc service-groups])
       (group svc "select" regions))
     (for/list ([r regions])
-      (define names (map proxy-name (hash-ref groups r)))
-      (format "~a = select, ~a" r (string-join names ", ")))))
-   "\n"))
+      (let* ([names (map proxy-name (hash-ref groups r))])
+        (format "~a = select, ~a" r (string-join names ", "))))))
+   "\n")
 
 ;; ============ 统计 ============
 (define (print-statistics proxies)
