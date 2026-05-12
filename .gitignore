@@ -2,3 +2,5 @@
 .trae/
 .claude/
 scripts/.env
+scripts/surge-template.conf
+surge/surge.conf

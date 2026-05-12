@@ -26,12 +26,16 @@
 
 (define service-groups '("OpenAI" "Claude" "Google" "Netflix" "Telegram"))
 
+(define script-dir
+  (let-values ([(base name dir?) (split-path (path->complete-path (find-system-path 'run-file) (find-system-path 'orig-dir)))])
+    base))
+
 ;; ============ 数据结构 ============
 (struct proxy (name config-line region) #:transparent)
 
 ;; ============ 订阅链接读取 ============
 (define (load-dot-env)
-  (define env-file (build-path (find-system-path 'orig-dir) ".env"))
+  (define env-file (build-path script-dir ".env"))
   (for ([line (in-list (string-split (file->string env-file) "\n"))])
     (define trimmed (string-trim line))
     (when (and (> (string-length trimmed) 0)
@@ -171,10 +175,17 @@
   (for ([r regions])
     (printf "  ~a (~a 个节点)\n" r (length (hash-ref groups r)))))
 
+;; ============ 模板 ============
+(define (read-template)
+  (define template-path (build-path script-dir "surge-template.conf"))
+  (unless (file-exists? template-path)
+    (error (format "模板文件不存在: ~a\n请创建包含 {{PROXY_SECTION}} 占位符的模板文件" template-path)))
+  (file->string template-path))
+
 ;; ============ 主函数 ============
 (define (main)
   (define sub-url (get-subscription-url))
-  (define output-path (build-path (find-system-path 'orig-dir) ".." "surge" "surge.conf"))
+  (define output-path (build-path "/tmp" "surge.conf"))
 
   (printf "========================================\n")
   (printf "Surge 订阅更新\n")
@@ -196,7 +207,11 @@
   (printf "   ✓ 找到 ~a 个代理节点\n\n" (length proxies))
 
   (printf "3. 正在生成配置...\n")
-  (define output (generate-surge-config proxies))
+  (define proxy-section (generate-surge-config proxies))
+  (define template
+    (with-handlers ([exn:fail? (λ (e) (printf "   ✗ 错误: ~a\n" (exn-message e)) (exit 1))])
+      (read-template)))
+  (define output (string-replace template "{{PROXY_SECTION}}" proxy-section))
   (display-to-file output output-path #:exists 'replace)
   (printf "   ✓ 已保存到: ~a\n\n" output-path)
 
