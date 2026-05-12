@@ -58,7 +58,7 @@ SURGE_SUB_URL=https://your-subscription-url
 racket scripts/sub.rkt
 ```
 
-输出完整 Surge 配置到 `/tmp/surge.conf`，可直接用于 Surge。
+输出完整 Surge 配置到 `surge/surge.conf`，可直接用于 Surge。
 
 ## 维护
 

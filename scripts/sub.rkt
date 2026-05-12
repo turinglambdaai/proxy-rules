@@ -185,7 +185,7 @@
 ;; ============ 主函数 ============
 (define (main)
   (define sub-url (get-subscription-url))
-  (define output-path (build-path "/tmp" "surge.conf"))
+  (define output-path (build-path script-dir ".." "surge" "surge.conf"))
 
   (printf "========================================\n")
   (printf "Surge 订阅更新\n")
