@@ -1,32 +1,26 @@
 # Proxy Rules
 
-代理规则列表，支持 **Surge** (iOS/macOS) 和 **Clash Verge** (Windows)。
+[English](README.md) | [中文](README.zh-CN.md)
 
-Surge 和 Clash Verge 共用 `surge/` 下的 `.list` 规则文件。
+Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Both clients share the same `.list` rule files under `surge/`.
 
-## 目录结构
+## Rule Categories
 
-```
-proxy-rules/
-├── surge/               # 规则文件（手动维护）
-│   ├── blocked.list     # 需代理的域名
-│   ├── unblock.list     # 直连的国内域名
-│   ├── openai.list
-│   ├── claude.list
-│   ├── google.list
-│   ├── netflix.list
-│   └── telegram.list
-├── scripts/
-│   ├── clash-verge.js   # Clash Verge 全局扩展脚本
-│   └── sub.rkt          # 从订阅链接生成完整 Surge 配置
-└── README.md
-```
+| File | Description |
+|------|-------------|
+| `blocked.list` | Domains requiring proxy access (social media, AI services, etc.) |
+| `unblock.list` | Domestic domains routed directly |
+| `openai.list` | OpenAI / ChatGPT domains |
+| `claude.list` | Anthropic Claude domains |
+| `google.list` | Google services |
+| `netflix.list` | Netflix streaming |
+| `telegram.list` | Telegram messaging |
 
-## 使用方法
+## Usage
 
 ### Surge (iOS / macOS)
 
-在 `[Rule]` 中引用：
+Reference the rule sets in your `[Rule]` section:
 
 ```ini
 [Rule]
@@ -36,30 +30,50 @@ RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/blocked
 RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/unblock.list,DIRECT
 ```
 
-代理节点配置通过 `sub.rkt` 从订阅链接生成。
+### Clash Verge Rev (Windows)
 
-### Clash Verge (Windows)
+Paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. It automatically groups proxy nodes by region and configures rule-providers pointing to this repository's `surge/*.list` files.
 
-在 **订阅 → 全局扩展脚本** 中粘贴 `scripts/clash-verge.js`，会自动按地区分组节点并配置 rule-providers 指向本仓库的 `surge/*.list`。
+### Subscription Conversion
 
-### 订阅转换
+Generate a full Surge configuration from a subscription URL using `scripts/sub.rkt` (Racket):
 
-在 `scripts/` 下创建 `.env` 文件填入订阅地址（已 gitignore）：
+1. Create `scripts/.env` with your subscription URL:
+   ```
+   SURGE_SUB_URL=https://your-subscription-url
+   ```
+
+2. Create `scripts/surge-template.conf` with your static Surge sections (General, Rule, Host, Rewrite, MITM, etc.), using `{{PROXY_SECTION}}` as a placeholder for proxy nodes.
+
+3. Run the converter:
+   ```bash
+   racket scripts/sub.rkt
+   ```
+
+   This outputs a complete Surge config to `surge/surge.conf`.
+
+## Directory Structure
 
 ```
-SURGE_SUB_URL=https://your-subscription-url
+proxy-rules/
+  surge/               # Rule files (manually maintained)
+    blocked.list       # Proxy-required domains
+    unblock.list       # Direct-connect domestic domains
+    openai.list        # OpenAI / ChatGPT
+    claude.list        # Anthropic Claude
+    google.list        # Google services
+    netflix.list       # Netflix
+    telegram.list      # Telegram
+  scripts/
+    clash-verge.js     # Clash Verge Rev global extend script
+    sub.rkt            # Subscription-to-Surge config converter (Racket)
 ```
 
-在 `scripts/` 下创建 `surge-template.conf` 模板文件（已 gitignore），包含 Surge 的静态配置段（General、Rule、Host、Rewrite、MITM 等），用 `{{PROXY_SECTION}}` 占位标记代理节点插入位置。
+## Maintenance
 
-然后运行：
+Edit the `.list` files under `surge/` directly. After committing, Surge and Clash Verge will pull the updated rules on their next refresh cycle.
 
-```bash
-racket scripts/sub.rkt
-```
+## Requirements
 
-输出完整 Surge 配置到 `surge/surge.conf`，可直接用于 Surge。
-
-## 维护
-
-直接编辑 `surge/` 下的 `.list` 文件，提交后 Surge 和 Clash Verge 会在下次规则更新时自动拉取。
+- **Surge** or **Clash Verge Rev** as the proxy client
+- **Racket** (optional, only needed for subscription conversion with `sub.rkt`)
