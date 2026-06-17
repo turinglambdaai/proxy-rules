@@ -1,5 +1,7 @@
 # Proxy Rules
 
+[![Language](https://img.shields.io/badge/language-Racket-red)]
+
 [English](README.md) | [中文](README.zh-CN.md)
 
 Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Both clients share the same `.list` rule files under `surge/`.
