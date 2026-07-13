@@ -1,8 +1,10 @@
 # Proxy Rules
 
-[English](README.md) | [中文](README.zh-CN.md)
-
 代理规则列表，支持 **Surge**（iOS/macOS）和 **Clash Verge Rev**（Windows）。两个客户端共用 `surge/` 下的 `.list` 规则文件。
+
+![Racket](https://img.shields.io/badge/Racket-9F1D20?logo=racket&logoColor=white)
+
+[English](README.md) · **中文**
 
 ## 规则分类
 
@@ -24,10 +26,10 @@
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/openai.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/google.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/blocked.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/openai.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/google.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/blocked.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/unblock.list,DIRECT
 ```
 
 ### Clash Verge Rev (Windows)
@@ -77,3 +79,7 @@ proxy-rules/
 
 - **Surge** 或 **Clash Verge Rev** 作为代理客户端
 - **Racket**（可选，仅在使用 `sub.rkt` 进行订阅转换时需要）
+
+## 许可证
+
+本项目暂未包含许可证文件。

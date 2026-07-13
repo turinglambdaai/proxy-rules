@@ -1,10 +1,10 @@
 # Proxy Rules
 
-![Language](https://img.shields.io/badge/language-Racket-red)
-
-[English](README.md) | [中文](README.zh-CN.md)
-
 Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Both clients share the same `.list` rule files under `surge/`.
+
+![Racket](https://img.shields.io/badge/Racket-9F1D20?logo=racket&logoColor=white)
+
+**English** · [中文](README.zh-CN.md)
 
 ## Rule Categories
 
@@ -26,10 +26,10 @@ Reference the rule sets in your `[Rule]` section:
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/openai.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/google.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/blocked.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/jrtxio/proxy-rules/main/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/openai.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/google.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/blocked.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/unblock.list,DIRECT
 ```
 
 ### Clash Verge Rev (Windows)
@@ -79,3 +79,7 @@ Edit the `.list` files under `surge/` directly. After committing, Surge and Clas
 
 - **Surge** or **Clash Verge Rev** as the proxy client
 - **Racket** (optional, only needed for subscription conversion with `sub.rkt`)
+
+## License
+
+This project does not currently include a license file.
