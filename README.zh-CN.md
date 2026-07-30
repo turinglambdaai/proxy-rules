@@ -2,7 +2,7 @@
 
 代理规则列表，支持 **Surge**（iOS/macOS）和 **Clash Verge Rev**（Windows）。两个客户端共用 `surge/` 下的 `.list` 规则文件。
 
-![Racket](https://img.shields.io/badge/Racket-9F1D20?logo=racket&logoColor=white)
+![Surge](https://img.shields.io/badge/Proxy_Rules-9F1D20?logo=protonvpn&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 [English](README.md) · **中文**
 
@@ -18,9 +18,16 @@
 | `netflix.list` | Netflix 流媒体 |
 | `telegram.list` | Telegram 即时通讯 |
 
-## 使用方法
+## 快速开始
 
-### Surge (iOS / macOS)
+### 1. 克隆仓库
+
+```bash
+git clone https://github.com/turinglambdaai/proxy-rules.git
+cd proxy-rules
+```
+
+### 2. Surge (iOS / macOS)
 
 在 `[Rule]` 中引用规则集：
 
@@ -54,21 +61,21 @@ RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge
 
    输出完整 Surge 配置到 `surge/surge.conf`。
 
-## 目录结构
+## 项目结构
 
 ```
 proxy-rules/
-  surge/               # 规则文件（手动维护）
-    blocked.list       # 需代理的域名
-    unblock.list       # 直连的国内域名
-    openai.list        # OpenAI / ChatGPT
-    claude.list        # Anthropic Claude
-    google.list        # Google 服务
-    netflix.list       # Netflix
-    telegram.list      # Telegram
-  scripts/
-    clash-verge.js     # Clash Verge Rev 全局扩展脚本
-    sub.rkt            # 订阅链接转 Surge 配置（Racket）
+├── surge/               # 规则文件（手动维护）
+│   ├── blocked.list     # 需代理的域名
+│   ├── unblock.list     # 直连的国内域名
+│   ├── openai.list      # OpenAI / ChatGPT
+│   ├── claude.list      # Anthropic Claude
+│   ├── google.list      # Google 服务
+│   ├── netflix.list     # Netflix
+│   └── telegram.list    # Telegram
+└── scripts/
+    ├── clash-verge.js   # Clash Verge Rev 全局扩展脚本
+    └── sub.rkt          # 订阅链接转 Surge 配置（Racket）
 ```
 
 ## 维护
@@ -82,4 +89,4 @@ proxy-rules/
 
 ## 许可证
 
-本项目暂未包含许可证文件。
+基于 [MIT 许可证](LICENSE) 授权。

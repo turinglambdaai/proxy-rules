@@ -2,7 +2,7 @@
 
 Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Both clients share the same `.list` rule files under `surge/`.
 
-![Racket](https://img.shields.io/badge/Racket-9F1D20?logo=racket&logoColor=white)
+![Surge](https://img.shields.io/badge/Proxy_Rules-9F1D20?logo=protonvpn&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **English** · [中文](README.zh-CN.md)
 
@@ -18,9 +18,16 @@ Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Bo
 | `netflix.list` | Netflix streaming |
 | `telegram.list` | Telegram messaging |
 
-## Usage
+## Quick Start
 
-### Surge (iOS / macOS)
+### 1. Clone
+
+```bash
+git clone https://github.com/turinglambdaai/proxy-rules.git
+cd proxy-rules
+```
+
+### 2. Surge (iOS / macOS)
 
 Reference the rule sets in your `[Rule]` section:
 
@@ -54,21 +61,21 @@ Generate a full Surge configuration from a subscription URL using `scripts/sub.r
 
    This outputs a complete Surge config to `surge/surge.conf`.
 
-## Directory Structure
+## Project Structure
 
 ```
 proxy-rules/
-  surge/               # Rule files (manually maintained)
-    blocked.list       # Proxy-required domains
-    unblock.list       # Direct-connect domestic domains
-    openai.list        # OpenAI / ChatGPT
-    claude.list        # Anthropic Claude
-    google.list        # Google services
-    netflix.list       # Netflix
-    telegram.list      # Telegram
-  scripts/
-    clash-verge.js     # Clash Verge Rev global extend script
-    sub.rkt            # Subscription-to-Surge config converter (Racket)
+├── surge/               # Rule files (manually maintained)
+│   ├── blocked.list     # Proxy-required domains
+│   ├── unblock.list     # Direct-connect domestic domains
+│   ├── openai.list      # OpenAI / ChatGPT
+│   ├── claude.list      # Anthropic Claude
+│   ├── google.list      # Google services
+│   ├── netflix.list     # Netflix
+│   └── telegram.list    # Telegram
+└── scripts/
+    ├── clash-verge.js   # Clash Verge Rev global extend script
+    └── sub.rkt          # Subscription-to-Surge config converter (Racket)
 ```
 
 ## Maintenance
@@ -82,4 +89,4 @@ Edit the `.list` files under `surge/` directly. After committing, Surge and Clas
 
 ## License
 
-This project does not currently include a license file.
+Licensed under the [MIT License](LICENSE).
