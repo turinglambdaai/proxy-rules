@@ -30,6 +30,11 @@ DOMAIN-SUFFIX,redd.it
 DOMAIN-SUFFIX,redditstatic.com
 DOMAIN-SUFFIX,redditmedia.com
 
+# ---- Imgur ----
+# Image host behind Reddit/HN posts; i.imgur.com direct images included
+DOMAIN-SUFFIX,imgur.com
+DOMAIN-SUFFIX,imgurinc.com
+
 # ---- Discord ----
 DOMAIN-SUFFIX,discord.com
 DOMAIN-SUFFIX,discord.gg
