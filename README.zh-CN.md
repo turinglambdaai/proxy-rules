@@ -33,11 +33,18 @@ cd proxy-rules
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,OpenAI
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/claude.list,Claude
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Google
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/netflix.list,Netflix
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Telegram
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
+GEOIP,CN,DIRECT
+FINAL,Proxy
 ```
+
+其中 `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` 与 `scripts/sub.rkt` 生成的策略组同名；手动维护配置的话按自己策略组名调整。
 
 ### 3. Clash Verge Rev (Windows)
 
