@@ -33,13 +33,13 @@ Reference the rule sets in your `[Rule]` section:
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/openai.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/google.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/blocked.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/unblock.list,DIRECT
 ```
 
-### Clash Verge Rev (Windows)
+### 3. Clash Verge Rev (Windows)
 
 Paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. It automatically groups proxy nodes by region and configures rule-providers pointing to this repository's `surge/*.list` files.
 

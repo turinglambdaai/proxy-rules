@@ -33,13 +33,13 @@ cd proxy-rules
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/openai.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/google.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/blocked.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/main/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/unblock.list,DIRECT
 ```
 
-### Clash Verge Rev (Windows)
+### 3. Clash Verge Rev (Windows)
 
 将 `scripts/clash-verge.js` 的内容粘贴到 **订阅 > 全局扩展脚本** 中。脚本会自动按地区分组代理节点，并配置 rule-providers 指向本仓库的 `surge/*.list` 文件。
 
