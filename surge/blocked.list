@@ -132,3 +132,9 @@ DOMAIN-SUFFIX,brew.sh
 # ---- GitHub Copilot ----
 DOMAIN-SUFFIX,githubcopilot.com
 DOMAIN-SUFFIX,zread.ai
+
+# ---- Waffo ----
+# Dev billing/MoR platform on Vercel (slow direct); docs/pancake subdomains included
+DOMAIN-SUFFIX,waffo.ai
+# FeatureBase feedback widget embedded by waffo.ai and many SaaS sites
+DOMAIN-SUFFIX,featurebase.app
