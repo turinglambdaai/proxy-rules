@@ -16,9 +16,12 @@ DOMAIN-SUFFIX,perplexity.ai
 # ---- Social & Communication ----
 DOMAIN-SUFFIX,facebook.com
 DOMAIN-SUFFIX,fb.com
+DOMAIN-SUFFIX,fbcdn.net
 DOMAIN-SUFFIX,messenger.com
 DOMAIN-SUFFIX,instagram.com
+DOMAIN-SUFFIX,cdninstagram.com
 DOMAIN-SUFFIX,whatsapp.com
+DOMAIN-SUFFIX,whatsapp.net
 
 # ---- Reddit ----
 DOMAIN-SUFFIX,reddit.com
@@ -68,12 +71,16 @@ DOMAIN-SUFFIX,wikiversity.org
 DOMAIN-SUFFIX,wikivoyage.org
 DOMAIN-SUFFIX,wikidata.org
 DOMAIN-SUFFIX,yinwang.org
+DOMAIN-SUFFIX,news.ycombinator.com
+DOMAIN-SUFFIX,hn.algolia.com
 
 # ---- Development Communities ----
 DOMAIN-SUFFIX,stackoverflow.com
 DOMAIN-SUFFIX,stackexchange.com
+DOMAIN-SUFFIX,sstatic.net
 DOMAIN-SUFFIX,stackoverflow.blog
 DOMAIN-SUFFIX,npmjs.com
+DOMAIN-SUFFIX,npmjs.org
 DOMAIN-SUFFIX,pypi.org
 DOMAIN-SUFFIX,files.pythonhosted.org
 DOMAIN-SUFFIX,docker.io
