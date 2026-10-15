@@ -12,6 +12,7 @@ DOMAIN-SUFFIX,z.ai
 DOMAIN-SUFFIX,huggingface.co
 DOMAIN-SUFFIX,hf.co
 DOMAIN-SUFFIX,perplexity.ai
+DOMAIN-SUFFIX,openrouter.ai
 
 # ---- Social & Communication ----
 DOMAIN-SUFFIX,facebook.com
@@ -73,6 +74,9 @@ DOMAIN-SUFFIX,wikidata.org
 DOMAIN-SUFFIX,yinwang.org
 DOMAIN-SUFFIX,news.ycombinator.com
 DOMAIN-SUFFIX,hn.algolia.com
+DOMAIN-SUFFIX,notion.so
+DOMAIN-SUFFIX,notion.com
+DOMAIN-SUFFIX,notion.site
 
 # ---- Development Communities ----
 DOMAIN-SUFFIX,stackoverflow.com
