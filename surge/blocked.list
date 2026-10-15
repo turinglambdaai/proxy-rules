@@ -8,6 +8,11 @@ DOMAIN-SUFFIX,immersivetranslate.com
 # ---- GLM ----
 DOMAIN-SUFFIX,z.ai
 
+# ---- AI Services ----
+DOMAIN-SUFFIX,huggingface.co
+DOMAIN-SUFFIX,hf.co
+DOMAIN-SUFFIX,perplexity.ai
+
 # ---- Social & Communication ----
 DOMAIN-SUFFIX,facebook.com
 DOMAIN-SUFFIX,fb.com
@@ -39,14 +44,13 @@ DOMAIN-SUFFIX,discordpartygames.com
 DOMAIN-SUFFIX,discordsays.com
 DOMAIN-SUFFIX,watchanimeattheoffice.com
 
-# ---- X / Twitter ----
+# ---- X / Twitter / xAI ----
 DOMAIN-SUFFIX,x.com
 DOMAIN-SUFFIX,twitter.com
 DOMAIN-SUFFIX,t.co
-DOMAIN-SUFFIX,pbs.twimg.com
-DOMAIN-SUFFIX,video.twimg.com
-DOMAIN-SUFFIX,ton.twimg.com
-DOMAIN-SUFFIX,abs.twimg.com
+DOMAIN-SUFFIX,twimg.com
+DOMAIN-SUFFIX,x.ai
+DOMAIN-SUFFIX,grok.com
 
 # ---- Knowledge / Info ----
 DOMAIN-SUFFIX,wikipedia.org
@@ -65,6 +69,7 @@ DOMAIN-SUFFIX,stackexchange.com
 DOMAIN-SUFFIX,stackoverflow.blog
 DOMAIN-SUFFIX,npmjs.com
 DOMAIN-SUFFIX,pypi.org
+DOMAIN-SUFFIX,files.pythonhosted.org
 DOMAIN-SUFFIX,docker.io
 DOMAIN-SUFFIX,docker.com
 DOMAIN-SUFFIX,dev.to
@@ -81,6 +86,7 @@ DOMAIN-SUFFIX,linux.do
 
 # ---- Cloud / Tools ----
 DOMAIN-KEYWORD,github
+DOMAIN-SUFFIX,ghcr.io
 DOMAIN-SUFFIX,gitlab.com
 DOMAIN-SUFFIX,formulae.brew.sh
 DOMAIN-SUFFIX,brew.sh

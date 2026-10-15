@@ -116,6 +116,7 @@ function main(config, name) {
     Direct: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/unblock.list",
       interval: 86400,
       path: "./ruleset/unblock.yml",
@@ -123,6 +124,7 @@ function main(config, name) {
     OpenAI: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list",
       interval: 86400,
       path: "./ruleset/openai.yml",
@@ -130,6 +132,7 @@ function main(config, name) {
     Claude: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/claude.list",
       interval: 86400,
       path: "./ruleset/claude.yml",
@@ -137,6 +140,7 @@ function main(config, name) {
     Google: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list",
       interval: 86400,
       path: "./ruleset/google.yml",
@@ -144,6 +148,7 @@ function main(config, name) {
     Netflix: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/netflix.list",
       interval: 86400,
       path: "./ruleset/netflix.yml",
@@ -151,6 +156,7 @@ function main(config, name) {
     Telegram: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list",
       interval: 86400,
       path: "./ruleset/telegram.yml",
@@ -158,6 +164,7 @@ function main(config, name) {
     Proxy: {
       type: "http",
       behavior: "classical",
+      format: "text",
       url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list",
       interval: 86400,
       path: "./ruleset/blocked.yml",
