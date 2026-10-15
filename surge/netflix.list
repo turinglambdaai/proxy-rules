@@ -15,7 +15,6 @@ DOMAIN-SUFFIX,nflxvideo.net
 
 # ---- CDN / Streaming ----
 DOMAIN-SUFFIX,fast.com
-DOMAIN-SUFFIX,prod.fastly.netflix.net
 
 # ---- Telemetry / Control ----
 DOMAIN-SUFFIX,nflxstatus.com

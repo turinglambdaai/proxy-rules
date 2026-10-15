@@ -7,7 +7,6 @@ DOMAIN-SUFFIX,immersivetranslate.com
 
 # ---- GLM ----
 DOMAIN-SUFFIX,z.ai
-DOMAIN-SUFFIX,api.z.ai
 
 # ---- Social & Communication ----
 DOMAIN-SUFFIX,facebook.com
@@ -15,6 +14,30 @@ DOMAIN-SUFFIX,fb.com
 DOMAIN-SUFFIX,messenger.com
 DOMAIN-SUFFIX,instagram.com
 DOMAIN-SUFFIX,whatsapp.com
+
+# ---- Discord ----
+DOMAIN-SUFFIX,discord.com
+DOMAIN-SUFFIX,discord.gg
+DOMAIN-SUFFIX,discord.co
+DOMAIN-SUFFIX,dis.gd
+DOMAIN-SUFFIX,discordapp.com
+DOMAIN-SUFFIX,discordapp.net
+DOMAIN-SUFFIX,discordapp.io
+DOMAIN-SUFFIX,discord.media
+DOMAIN-SUFFIX,discordcdn.com
+DOMAIN-SUFFIX,discord.new
+DOMAIN-SUFFIX,discord.store
+DOMAIN-SUFFIX,discord.dev
+DOMAIN-SUFFIX,discord.design
+DOMAIN-SUFFIX,discord.gift
+DOMAIN-SUFFIX,discord.gifts
+DOMAIN-SUFFIX,discordstatus.com
+DOMAIN-SUFFIX,discordactivities.com
+DOMAIN-SUFFIX,discord-activities.com
+DOMAIN-SUFFIX,discordmerch.com
+DOMAIN-SUFFIX,discordpartygames.com
+DOMAIN-SUFFIX,discordsays.com
+DOMAIN-SUFFIX,watchanimeattheoffice.com
 
 # ---- X / Twitter ----
 DOMAIN-SUFFIX,x.com
@@ -24,7 +47,6 @@ DOMAIN-SUFFIX,pbs.twimg.com
 DOMAIN-SUFFIX,video.twimg.com
 DOMAIN-SUFFIX,ton.twimg.com
 DOMAIN-SUFFIX,abs.twimg.com
-DOMAIN-SUFFIX,api.twitter.com
 
 # ---- Knowledge / Info ----
 DOMAIN-SUFFIX,wikipedia.org
@@ -42,9 +64,8 @@ DOMAIN-SUFFIX,stackoverflow.com
 DOMAIN-SUFFIX,stackexchange.com
 DOMAIN-SUFFIX,stackoverflow.blog
 DOMAIN-SUFFIX,npmjs.com
-DOMAIN-SUFFIX,registry.npmjs.org
 DOMAIN-SUFFIX,pypi.org
-DOMAIN-SUFFIX,registry-1.docker.io
+DOMAIN-SUFFIX,docker.io
 DOMAIN-SUFFIX,docker.com
 DOMAIN-SUFFIX,dev.to
 DOMAIN-SUFFIX,medium.com

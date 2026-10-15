@@ -9,9 +9,6 @@ DOMAIN-SUFFIX,telegra.ph
 DOMAIN-SUFFIX,tdesktop.com
 DOMAIN-SUFFIX,telesco.pe
 
-# ---- API / Bot ----
-
 # ---- Media CDN ----
 DOMAIN-SUFFIX,telegram-cdn.org
-DOMAIN-SUFFIX,cdn.telegram.org
 
