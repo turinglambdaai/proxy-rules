@@ -96,6 +96,9 @@ DOMAIN-SUFFIX,pub.dev
 DOMAIN-SUFFIX,dart.dev
 DOMAIN-KEYWORD,v2ex
 DOMAIN-SUFFIX,linux.do
+DOMAIN-SUFFIX,racket-lang.org
+DOMAIN-SUFFIX,discourse.group
+DOMAIN-SUFFIX,discourse.org
 
 # ---- Cloud / Tools ----
 DOMAIN-KEYWORD,github
