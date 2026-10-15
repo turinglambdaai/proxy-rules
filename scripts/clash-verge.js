@@ -172,6 +172,7 @@ function main(config, name) {
     "RULE-SET,Google,Google",
     "RULE-SET,Netflix,Netflix",
     "RULE-SET,Telegram,Telegram",
+    "RULE-SET,Proxy,Proxy",
     "GEOIP,CN,DIRECT",
     "MATCH,Proxy",
   ];
