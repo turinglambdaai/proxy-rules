@@ -20,6 +20,12 @@ DOMAIN-SUFFIX,messenger.com
 DOMAIN-SUFFIX,instagram.com
 DOMAIN-SUFFIX,whatsapp.com
 
+# ---- Reddit ----
+DOMAIN-SUFFIX,reddit.com
+DOMAIN-SUFFIX,redd.it
+DOMAIN-SUFFIX,redditstatic.com
+DOMAIN-SUFFIX,redditmedia.com
+
 # ---- Discord ----
 DOMAIN-SUFFIX,discord.com
 DOMAIN-SUFFIX,discord.gg
