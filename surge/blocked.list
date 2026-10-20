@@ -138,3 +138,9 @@ DOMAIN-SUFFIX,zread.ai
 DOMAIN-SUFFIX,waffo.ai
 # FeatureBase feedback widget embedded by waffo.ai and many SaaS sites
 DOMAIN-SUFFIX,featurebase.app
+
+# ---- Unraid (NAS) ----
+# unraid.net covers docs/forums/updates and keys.unraid.net (license activation)
+DOMAIN-SUFFIX,unraid.com
+DOMAIN-SUFFIX,unraid.net
+DOMAIN-SUFFIX,lime-technology.com
