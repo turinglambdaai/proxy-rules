@@ -11,6 +11,10 @@ DOMAIN-SUFFIX,ggpht.com
 DOMAIN-SUFFIX,googletagmanager.com
 DOMAIN-SUFFIX,withgoogle.com
 
+# ---- Gmail (Mail app IMAP/SMTP endpoints live under gmail.com, not google.com) ----
+DOMAIN-SUFFIX,gmail.com
+DOMAIN-SUFFIX,googlemail.com
+
 # ---- Regional Domains ----
 DOMAIN-SUFFIX,google.com.hk
 DOMAIN-SUFFIX,google.co.jp
