@@ -12,3 +12,7 @@ DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,openai-cdn.com
 
+# ---- Feature flags / telemetry ----
+DOMAIN-SUFFIX,oaistatsig.com
+DOMAIN-SUFFIX,statsigapi.net
+
