@@ -15,7 +15,6 @@ Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Bo
 | `openai.list` | OpenAI / ChatGPT domains |
 | `claude.list` | Anthropic Claude domains |
 | `google.list` | Google services |
-| `netflix.list` | Netflix streaming (not wired into default rules; file kept) |
 | `telegram.list` | Telegram messaging (routed to `Proxy`) |
 
 ## Quick Start
@@ -118,7 +117,6 @@ proxy-rules/
 │   ├── openai.list      # OpenAI / ChatGPT
 │   ├── claude.list      # Anthropic Claude
 │   ├── google.list      # Google services
-│   ├── netflix.list     # Netflix
 │   └── telegram.list    # Telegram
 └── scripts/
     ├── clash-verge.js         # Clash Verge Rev global extend script

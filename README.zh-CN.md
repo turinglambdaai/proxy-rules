@@ -15,7 +15,6 @@
 | `openai.list` | OpenAI / ChatGPT 域名 |
 | `claude.list` | Anthropic Claude 域名 |
 | `google.list` | Google 服务 |
-| `netflix.list` | Netflix 流媒体（已不接入默认规则，文件保留） |
 | `telegram.list` | Telegram 即时通讯（跟随 `Proxy`） |
 
 ## 快速开始
@@ -118,7 +117,6 @@ proxy-rules/
 │   ├── openai.list      # OpenAI / ChatGPT
 │   ├── claude.list      # Anthropic Claude
 │   ├── google.list      # Google 服务
-│   ├── netflix.list     # Netflix
 │   └── telegram.list    # Telegram
 └── scripts/
     ├── clash-verge.js         # Clash Verge Rev 全局扩展脚本
