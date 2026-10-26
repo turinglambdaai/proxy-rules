@@ -48,16 +48,18 @@ The `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` policy names match t
 
 ### 3. Clash Verge Rev (Windows)
 
-Paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. It automatically groups proxy nodes by region and configures rule-providers pointing to this repository's `surge/*.list` files.
+Paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. It groups proxy nodes by region and configures rule-providers pointing to this repository's `surge/*.list` files. With multiple subscriptions, define them as `proxy-providers` (see [Multi-provider failover](#multi-provider-failover)).
 
 ### Subscription Conversion
 
-Generate a full Surge configuration from a subscription URL using `scripts/sub.rkt` (Racket):
+Generate a full Surge configuration from one or more subscription URLs using `scripts/sub.rkt` (Racket):
 
-1. Create `scripts/.env` with your subscription URL:
+1. Copy `scripts/.env.example` to `scripts/.env` and fill in your subscriptions. **Order = priority**: the first provider is primary, the rest serve as automatic fallback:
    ```
-   SURGE_SUB_URL=https://your-subscription-url
+   SUB_SSRDOG_URL=https://ssrdog-subscription-url
+   SUB_MITCE_URL=https://mitce-subscription-url
    ```
+   The legacy single-subscription form `SURGE_SUB_URL=<url>` still works.
 
 2. Create `scripts/surge-template.conf` with your static Surge sections (General, Rule, Host, Rewrite, MITM, etc.), using `{{PROXY_SECTION}}` as a placeholder for proxy nodes.
 
@@ -66,7 +68,43 @@ Generate a full Surge configuration from a subscription URL using `scripts/sub.r
    racket scripts/sub.rkt
    ```
 
-   This outputs a complete Surge config to `surge/surge.conf`.
+   This outputs a complete Surge config to `surge/surge.conf`. A failed subscription is skipped with a warning; generation only aborts when all subscriptions fail.
+
+### Multi-provider failover
+
+Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group structure:
+
+| Group | Type | Members |
+|-------|------|---------|
+| `Proxy` | select | `Auto`, one group per provider, regions, `DIRECT` |
+| `Auto` | fallback | regions — first healthy region wins |
+| `SSRDog` / `Mitce` | url-test | all nodes of that provider |
+| `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`, regions, `DIRECT` |
+| regions (🇭🇰/🇺🇸/…) | fallback | nodes ordered by provider priority |
+
+Region groups are `fallback`: every primary-provider node is listed ahead of the backup-provider nodes, and traffic only moves to the backup when all primary nodes fail health checks (and moves back on recovery). So when ssrdog's US nodes die, mitce's US nodes take over automatically — no manual re-wiring.
+
+**Clash Verge Rev with multiple subscriptions**: Clash Verge merges one subscription profile at a time, so put both subscriptions into the global Merge config as `proxy-providers` (keys must be `ssrdog` and `mitce` to match the display-name map in `clash-verge.js`; URLs stay in this local file, never committed):
+
+```yaml
+proxy-providers:
+  ssrdog:
+    url: "https://ssrdog-subscription-url"
+    path: ./providers/ssrdog.yaml
+    interval: 86400
+    override:
+      additional-prefix: "[SSRDog] "
+    health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
+  mitce:
+    url: "https://mitce-subscription-url"
+    path: ./providers/mitce.yaml
+    interval: 86400
+    override:
+      additional-prefix: "[Mitce] "
+    health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
+```
+
+The global extend script then builds region groups across all providers via `use` + `filter`, mirroring the Surge groups.
 
 ## Project Structure
 
@@ -81,18 +119,28 @@ proxy-rules/
 │   ├── netflix.list     # Netflix
 │   └── telegram.list    # Telegram
 └── scripts/
-    ├── clash-verge.js   # Clash Verge Rev global extend script
-    └── sub.rkt          # Subscription-to-Surge config converter (Racket)
+    ├── clash-verge.js         # Clash Verge Rev global extend script
+    ├── sub.rkt                # Subscription-to-Surge config converter (Racket)
+    ├── .env.example           # Template for subscription URLs (multi-provider)
+    ├── test-sub.rkt           # Unit tests for sub.rkt
+    └── test-clash-verge.mjs   # Unit tests for clash-verge.js
 ```
 
 ## Maintenance
 
 Edit the `.list` files under `surge/` directly. After committing, Surge and Clash Verge will pull the updated rules on their next refresh cycle.
 
+Run the script tests after touching `scripts/` (the region-detection patterns are shared between `sub.rkt` and `clash-verge.js` and must stay in sync):
+
+```bash
+racket scripts/test-sub.rkt
+node scripts/test-clash-verge.mjs
+```
+
 ## Requirements
 
 - **Surge** or **Clash Verge Rev** as the proxy client
-- **Racket** (optional, only needed for subscription conversion with `sub.rkt`)
+- **Racket** (subscription conversion with `sub.rkt`) and **Node.js** (tests)
 
 ## License
 

@@ -48,16 +48,18 @@ FINAL,Proxy
 
 ### 3. Clash Verge Rev (Windows)
 
-将 `scripts/clash-verge.js` 的内容粘贴到 **订阅 > 全局扩展脚本** 中。脚本会自动按地区分组代理节点，并配置 rule-providers 指向本仓库的 `surge/*.list` 文件。
+将 `scripts/clash-verge.js` 的内容粘贴到 **订阅 > 全局扩展脚本** 中。脚本会自动按地区分组代理节点，并配置 rule-providers 指向本仓库的 `surge/*.list` 文件。多订阅场景先把订阅配成 `proxy-providers`，见[多订阅备份切换](#多订阅备份切换)。
 
 ### 订阅转换
 
-通过 `scripts/sub.rkt`（Racket 语言）从订阅链接生成完整的 Surge 配置：
+通过 `scripts/sub.rkt`（Racket 语言）从一个或多个订阅链接生成完整的 Surge 配置：
 
-1. 在 `scripts/` 下创建 `.env` 文件，填入订阅地址：
+1. 复制 `scripts/.env.example` 为 `scripts/.env`，填入订阅地址。**出现顺序 = 优先级**：排前面的 provider 主用，其余按序做自动备用：
    ```
-   SURGE_SUB_URL=https://your-subscription-url
+   SUB_SSRDOG_URL=https://ssrdog-订阅地址
+   SUB_MITCE_URL=https://mitce-订阅地址
    ```
+   旧的单订阅写法 `SURGE_SUB_URL=<url>` 仍然兼容。
 
 2. 在 `scripts/` 下创建 `surge-template.conf` 模板文件，包含 Surge 的静态配置段（General、Rule、Host、Rewrite、MITM 等），用 `{{PROXY_SECTION}}` 占位标记代理节点插入位置。
 
@@ -66,7 +68,43 @@ FINAL,Proxy
    racket scripts/sub.rkt
    ```
 
-   输出完整 Surge 配置到 `surge/surge.conf`。
+   输出完整 Surge 配置到 `surge/surge.conf`。单个订阅下载/解析失败只告警跳过，全部失败才中止。
+
+### 多订阅备份切换
+
+`sub.rkt`（Surge）与 `clash-verge.js`（Clash Verge）生成同构的策略组：
+
+| 策略组 | 类型 | 成员 |
+|--------|------|------|
+| `Proxy` | select | `Auto`、各 provider 组、各地区、`DIRECT` |
+| `Auto` | fallback | 各地区——第一个健康地区优先 |
+| `SSRDog` / `Mitce` | url-test | 该订阅全部节点 |
+| `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`、各地区、`DIRECT` |
+| 各地区组（🇭🇰/🇺🇸/…） | fallback | 节点按 provider 优先级排序 |
+
+地区组是 `fallback`：主用 provider 的节点全部排在备用 provider 节点之前，只有主用节点全部健康检查失败才切到备用，恢复后自动切回。ssrdog 美国节点全挂时，mitce 的美国节点自动顶上，无需手动重接。
+
+**Clash Verge Rev 多订阅**：Verge 一次只合并一个订阅 profile，所以把两个订阅写进全局扩展配置（Merge）的 `proxy-providers`（键名须为 `ssrdog` 和 `mitce`，与 `clash-verge.js` 的显示名映射对应；链接只存在本机 Merge 文件里，不入仓库）：
+
+```yaml
+proxy-providers:
+  ssrdog:
+    url: "https://ssrdog-订阅地址"
+    path: ./providers/ssrdog.yaml
+    interval: 86400
+    override:
+      additional-prefix: "[SSRDog] "
+    health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
+  mitce:
+    url: "https://mitce-订阅地址"
+    path: ./providers/mitce.yaml
+    interval: 86400
+    override:
+      additional-prefix: "[Mitce] "
+    health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
+```
+
+全局扩展脚本随后通过 `use` + `filter` 跨 provider 构建地区组，与 Surge 侧组结构一致。
 
 ## 项目结构
 
@@ -81,18 +119,28 @@ proxy-rules/
 │   ├── netflix.list     # Netflix
 │   └── telegram.list    # Telegram
 └── scripts/
-    ├── clash-verge.js   # Clash Verge Rev 全局扩展脚本
-    └── sub.rkt          # 订阅链接转 Surge 配置（Racket）
+    ├── clash-verge.js         # Clash Verge Rev 全局扩展脚本
+    ├── sub.rkt                # 订阅链接转 Surge 配置（Racket）
+    ├── .env.example           # 订阅地址模板（多订阅）
+    ├── test-sub.rkt           # sub.rkt 单元测试
+    └── test-clash-verge.mjs   # clash-verge.js 单元测试
 ```
 
 ## 维护
 
 直接编辑 `surge/` 下的 `.list` 文件，提交后 Surge 和 Clash Verge 会在下次规则更新时自动拉取。
 
+改动 `scripts/` 下的脚本后跑一遍测试（地区识别 pattern 由 `sub.rkt` 与 `clash-verge.js` 共用，必须两侧同步）：
+
+```bash
+racket scripts/test-sub.rkt
+node scripts/test-clash-verge.mjs
+```
+
 ## 环境要求
 
 - **Surge** 或 **Clash Verge Rev** 作为代理客户端
-- **Racket**（可选，仅在使用 `sub.rkt` 进行订阅转换时需要）
+- **Racket**（`sub.rkt` 订阅转换）、**Node.js**（跑测试）
 
 ## 许可证
 
