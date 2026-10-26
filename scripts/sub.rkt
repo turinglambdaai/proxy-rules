@@ -18,6 +18,11 @@
 
 (define service-groups '("OpenAI" "Claude" "Google" "Netflix" "Telegram"))
 
+;; 服务组默认落地地区：OpenAI/Claude 不对香港开放，钉美国（该地区存在时生效）；其余默认跟随 Proxy
+(define service-default-region
+  '(("OpenAI" . "🇺🇸 United States")
+    ("Claude" . "🇺🇸 United States")))
+
 ;; 健康检查参数（url-test / fallback 组共用）
 (define test-params "url=http://cp.cloudflare.com/generate_204, interval=300")
 
@@ -275,7 +280,12 @@
                                (filter (λ (p) (string=? (proxy-provider p) pn)) proxies))
                           (list test-params))))
     (for/list ([svc (in-list service-groups)])
-      (group-line svc "select" (append '("Proxy") regions '("DIRECT"))))
+      (define dr (assoc svc service-default-region))
+      (define pinned (and dr (member (cdr dr) regions)))
+      (group-line svc "select"
+                  (if pinned
+                      (append (list (cdr dr)) '("Proxy") (remove (cdr dr) regions) '("DIRECT"))
+                      (append '("Proxy") regions '("DIRECT")))))
     (for/list ([r (in-list regions)])
       (group-line r "fallback"
                   (append (map proxy-name (hash-ref groups r)) (list test-params)))))

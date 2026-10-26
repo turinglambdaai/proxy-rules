@@ -47,7 +47,7 @@ const proxyA = byName(groupsA, "Proxy");
 assert.deepEqual(proxyA.proxies, ["Auto", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "DIRECT"]);
 
 const openaiA = byName(groupsA, "OpenAI");
-assert.deepEqual(openaiA.proxies, ["Proxy", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "DIRECT"]);
+assert.deepEqual(openaiA.proxies, ["🇺🇸 United States", "Proxy", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇦🇺 Australia", "DIRECT"]);
 
 assert.equal(groupsA.find((g) => g.name === "SSRDOG"), undefined, "no provider groups in static-only mode");
 assert.deepEqual(cfgA.rules[cfgA.rules.length - 1], "MATCH,Proxy");

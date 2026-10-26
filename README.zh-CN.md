@@ -81,7 +81,8 @@ FINAL,Proxy
 | `Proxy` | select | `Auto`、各 provider 组、各地区、`DIRECT` |
 | `Auto` | fallback | 各地区——第一个健康地区优先 |
 | `SSRDOG` / `MITCE` | url-test | 该订阅全部节点 |
-| `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`、各地区、`DIRECT` |
+| `OpenAI` / `Claude` | select | 默认 🇺🇸 United States（不对香港开放的服务），其后 `Proxy`、各地区、`DIRECT` |
+| `Google` / `Netflix` / `Telegram` | select | `Proxy`、各地区、`DIRECT` |
 | 各地区组（🇭🇰/🇺🇸/…） | fallback | 节点按 provider 优先级排序 |
 
 地区组是 `fallback`：主用 provider 的节点全部排在备用 provider 节点之前，只有主用节点全部健康检查失败才切到备用，恢复后自动切回。ssrdog 美国节点全挂时，mitce 的美国节点自动顶上，无需手动重接。

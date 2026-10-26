@@ -94,18 +94,23 @@ function main(config, name) {
     });
   });
 
-  // 3. Proxy：默认 Auto，provider 组次之，DIRECT 收尾；功能组默认跟随 Proxy
+  // 3. Proxy：默认 Auto，provider 组次之，DIRECT 收尾
   groups.push({
     name: "Proxy",
     type: "select",
     proxies: ["Auto"].concat(providerNames).concat(regionNames).concat(["DIRECT"]),
   });
+  // 功能组：默认跟随 Proxy；OpenAI/Claude 不对香港开放，美国地区存在时钉美国为默认
+  var SERVICE_DEFAULT_REGION = { OpenAI: "🇺🇸 United States", Claude: "🇺🇸 United States" };
   ["OpenAI", "Claude", "Google", "Netflix", "Telegram"].forEach(function (svc) {
-    groups.push({
-      name: svc,
-      type: "select",
-      proxies: ["Proxy"].concat(regionNames).concat(["DIRECT"]),
-    });
+    var members = ["Proxy"].concat(regionNames).concat(["DIRECT"]);
+    var pinned = SERVICE_DEFAULT_REGION[svc];
+    if (pinned && regionNames.indexOf(pinned) >= 0) {
+      members = [pinned, "Proxy"]
+        .concat(regionNames.filter(function (r) { return r !== pinned; }))
+        .concat(["DIRECT"]);
+    }
+    groups.push({ name: svc, type: "select", proxies: members });
   });
 
   // 4. 地区组

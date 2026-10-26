@@ -81,7 +81,8 @@ Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group s
 | `Proxy` | select | `Auto`, one group per provider, regions, `DIRECT` |
 | `Auto` | fallback | regions — first healthy region wins |
 | `SSRDOG` / `MITCE` | url-test | all nodes of that provider |
-| `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`, regions, `DIRECT` |
+| `OpenAI` / `Claude` | select | 🇺🇸 United States default (US-blocked services), then `Proxy`, regions, `DIRECT` |
+| `Google` / `Netflix` / `Telegram` | select | `Proxy`, regions, `DIRECT` |
 | regions (🇭🇰/🇺🇸/…) | fallback | nodes ordered by provider priority |
 
 Region groups are `fallback`: every primary-provider node is listed ahead of the backup-provider nodes, and traffic only moves to the backup when all primary nodes fail health checks (and moves back on recovery). So when ssrdog's US nodes die, mitce's US nodes take over automatically — no manual re-wiring.

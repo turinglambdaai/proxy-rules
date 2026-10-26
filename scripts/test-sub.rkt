@@ -85,9 +85,10 @@ EOF
 (expect-line "SSRDOG = url-test, 🇺🇸 US-01, 🇺🇸 US-02, 🇭🇰 HK-01, url=http://cp.cloudflare.com/generate_204, interval=300")
 (expect-line "MITCE = url-test, 🇺🇸 US-01 | MITCE, 美国 02, 🇯🇵 JP-01, url=http://cp.cloudflare.com/generate_204, interval=300")
 
-;; 功能组默认跟随 Proxy，可手动钉地区，DIRECT 收尾
-(expect-line "OpenAI = select, Proxy, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
-(expect-line "Claude = select, Proxy, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
+;; 功能组：OpenAI/Claude 默认钉美国（不对香港开放），其余默认跟随 Proxy；DIRECT 收尾
+(expect-line "OpenAI = select, 🇺🇸 United States, Proxy, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
+(expect-line "Claude = select, 🇺🇸 United States, Proxy, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
+(expect-line "Google = select, Proxy, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
 
 ;; 地区组 = fallback：主订阅节点在前，备用订阅在后（核心备份语义）
 (expect-line "🇺🇸 United States = fallback, 🇺🇸 US-01, 🇺🇸 US-02, 🇺🇸 US-01 | MITCE, 美国 02, url=http://cp.cloudflare.com/generate_204, interval=300")
