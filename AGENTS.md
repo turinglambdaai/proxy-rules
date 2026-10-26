@@ -6,7 +6,7 @@ Surge 与 Clash Verge Rev 共用的代理规则源：`surge/*.list` 规则文件
 
 - `surge/` — 全部 `.list` 规则文件（blocked/unblock/openai/claude/google/telegram 等），被 raw.githubusercontent.com 直连消费
 - `scripts/sub.rkt` — 订阅转 Surge 全量配置生成器（Racket），支持多订阅：`.env` 写 `SUB_<NAME>_URL=<url>`，出现顺序 = 优先级（主用 → fallback 备用）；兼容旧 `SURGE_SUB_URL`
-- `scripts/clash-verge.js` — Clash Verge Rev 的 Global Extend Script（区域分组 + rule-provider 接线）；多订阅走 Merge 的 `proxy-providers`（键名 ssrdog/mitce）
+- `scripts/clash-verge.js` — Clash Verge Rev 的 Global Extend Script（区域分组 + rule-provider 接线）。用户实际接线 = 手动添加订阅 + 仅脚本，无 Merge；跨机场 fallback 属可选方案（Merge + `proxy-providers`，键名 ssrdog/mitce，见 README）
 - 两侧地区识别 pattern（`raw-region-map` / `REGIONS`）共用同一正则源串，改动必须两侧同步
 
 ## 常用命令
