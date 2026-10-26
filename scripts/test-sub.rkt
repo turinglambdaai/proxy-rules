@@ -132,4 +132,14 @@ EOF
 (check-equal? (unbox attempts) 3)
 (check-false (retry-with-backoff "测试" 2 0 (λ () (error "始终失败"))))  ;; 耗尽后返回 #f
 
+;; ============ 命令行链接覆盖（写回 .env） ============
+
+(check-equal?
+ (env-lines-with-key '("# 注释行" "SUB_SSRDOG_URL=https://old" "SUB_MITCE_URL=https://m")
+                     "SUB_SSRDOG_URL" "https://new")
+ '("# 注释行" "SUB_SSRDOG_URL=https://new" "SUB_MITCE_URL=https://m"))
+(check-equal?
+ (env-lines-with-key '("SUB_MITCE_URL=https://m") "SUB_SSRDOG_URL" "https://new")
+ '("SUB_MITCE_URL=https://m" "SUB_SSRDOG_URL=https://new"))
+
 (printf "sub.rkt tests passed\n")

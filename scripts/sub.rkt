@@ -119,6 +119,37 @@
             (error "未设置订阅地址。请在 scripts/.env 中写 SUB_<NAME>_URL=<url>（多订阅，顺序即优先级），或旧写法 SURGE_SUB_URL=<url>")))
       from-file))
 
+;; 命令行一次性覆盖订阅链接并写回 .env（ssrdog 分享链接过期后需整条换新）：
+;;   racket scripts/sub.rkt ssrdog=https://新链接 mitce=https://新链接
+;; 返回更新后的行列表（纯函数，便于测试）
+(define (env-lines-with-key lines key val)
+  (define matched (box #f))
+  (define replaced
+    (for/list ([line (in-list lines)])
+      (if (and (not (unbox matched))
+               (> (string-length line) 0)
+               (string-prefix? (string-trim line) (format "~a=" key)))
+          (begin (set-box! matched #t) (format "~a=~a" key val))
+          line)))
+  (if (unbox matched)
+      replaced
+      (append replaced (list (format "~a=~a" key val)))))
+
+(define (apply-cli-overrides!)
+  (define args (vector->list (current-command-line-arguments)))
+  (for ([a (in-list args)] #:when (string-contains? a "="))
+    (define idx (string-idx a #\=))
+    (define key (string-upcase (string-trim (substring a 0 idx))))
+    (define url (string-trim (substring a (+ idx 1))))
+    (when (and (> (string-length key) 0)
+               (> (string-length url) 0)
+               (or (string-prefix? url "http://") (string-prefix? url "https://")))
+      (define env-file (build-path script-dir ".env"))
+      (define lines (string-split (if (file-exists? env-file) (file->string env-file) "") "\n"))
+      (define new-lines (env-lines-with-key lines (format "SUB_~a_URL" key) url))
+      (display-to-file (string-join new-lines "\n") env-file #:exists 'replace)
+      (printf "订阅 [~a] 链接已更新到 .env\n" key))))
+
 ;; ============ HTTP ============
 (define (fetch-url url-string)
   (define url (string->url url-string))
@@ -303,6 +334,7 @@
 
 ;; ============ 主函数 ============
 (define (main)
+  (apply-cli-overrides!)
   (define subs (collect-subs))
   (define output-path (build-path script-dir ".." "surge" "surge.conf"))
 
