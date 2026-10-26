@@ -46,7 +46,7 @@ The `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` policy names match t
 
 ### 3. Clash Verge Rev (Windows)
 
-Paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. It groups proxy nodes by region and configures rule-providers pointing to this repository's `surge/*.list` files. With multiple subscriptions, define them as `proxy-providers` (see [Multi-provider failover](#multi-provider-failover)).
+Add your subscription(s) manually as usual, then paste the contents of `scripts/clash-verge.js` into **Subscription > Global Extend Script**. The script groups proxy nodes by region and wires rule-providers pointing to this repository's `surge/*.list` files — no other setup is needed. (Optional dual-provider failover via global extend config: see [Multi-provider failover](#multi-provider-failover).)
 
 ### Subscription Conversion
 
@@ -70,9 +70,11 @@ Generate a full Surge configuration from one or more subscription URLs using `sc
 
 **Short-lived subscription links**: some panels hand out share links that stay valid only briefly (e.g. 60s after each manual activation) instead of permanent subscription URLs. The generator handles this: the URLs in `scripts/.env` stay the same — run `racket scripts/sub.rkt` first, then activate the links in each panel; the script retries every 6s for ~90s, so the fetch lands inside the activation window automatically.
 
-### Multi-provider failover
+### Multi-provider failover (optional)
 
-Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group structure:
+**Default wiring does not need this section** — one manually-added subscription plus the script covers everything above it. This is only for automatically failing over across airports inside one Clash config; without it, switch subscription profiles manually.
+
+With the global extend config (Merge) defining subscriptions as `proxy-providers`, `clash-verge.js` (Clash Verge) mirrors the Surge group structure:
 
 | Group | Type | Members |
 |-------|------|---------|

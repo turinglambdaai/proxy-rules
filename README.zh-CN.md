@@ -46,7 +46,7 @@ FINAL,Proxy
 
 ### 3. Clash Verge Rev (Windows)
 
-将 `scripts/clash-verge.js` 的内容粘贴到 **订阅 > 全局扩展脚本** 中。脚本会自动按地区分组代理节点，并配置 rule-providers 指向本仓库的 `surge/*.list` 文件。多订阅场景先把订阅配成 `proxy-providers`，见[多订阅备份切换](#多订阅备份切换)。
+订阅照常手动添加，然后将 `scripts/clash-verge.js` 的内容粘贴到 **订阅 > 全局扩展脚本** 中。脚本会自动按地区分组代理节点，并配置 rule-providers 指向本仓库的 `surge/*.list` 文件——除此之外无需任何配置。（可选的双机场自动切换见[多订阅备份切换](#多订阅备份切换)。）
 
 ### 订阅转换
 
@@ -70,9 +70,11 @@ FINAL,Proxy
 
 **临时订阅链接**：部分面板不提供长期订阅，只给手动激活后短时效的分享链接（如 mitce 激活后 60 秒、ssrdog 5 分钟）。生成器对此的处理：`scripts/.env` 里的 URL 保持不变——先跑 `racket scripts/sub.rkt`，再去各面板点激活，脚本每 6 秒自动重试约 90 秒，抓取会自动落在激活窗口内，不用复制粘贴链接。
 
-### 多订阅备份切换
+### 多订阅备份切换（可选）
 
-`sub.rkt`（Surge）与 `clash-verge.js`（Clash Verge）生成同构的策略组：
+**默认接线用不到本节**——单个手动订阅 + 脚本即可覆盖上面的全部内容。本节只用于在一个 Clash 配置内实现跨机场自动切换；不配置的话，直接手动切换订阅 profile 即可。
+
+通过全局扩展配置（Merge）把订阅定义为 `proxy-providers` 后，`clash-verge.js`（Clash Verge）会生成与 Surge 同构的策略组：
 
 | 策略组 | 类型 | 成员 |
 |--------|------|------|
