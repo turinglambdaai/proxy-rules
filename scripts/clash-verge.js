@@ -101,8 +101,9 @@ function main(config, name) {
     proxies: ["Auto"].concat(providerNames).concat(regionNames).concat(["DIRECT"]),
   });
   // 功能组：默认跟随 Proxy；OpenAI/Claude 不对香港开放，美国地区存在时钉美国为默认
+  // Telegram 对地区无要求，跟随 Proxy（telegram.list 规则目标 = Proxy）；Netflix 不使用，无组
   var SERVICE_DEFAULT_REGION = { OpenAI: "🇺🇸 United States", Claude: "🇺🇸 United States" };
-  ["OpenAI", "Claude", "Google", "Netflix", "Telegram"].forEach(function (svc) {
+  ["OpenAI", "Claude", "Google"].forEach(function (svc) {
     var members = ["Proxy"].concat(regionNames).concat(["DIRECT"]);
     var pinned = SERVICE_DEFAULT_REGION[svc];
     if (pinned && regionNames.indexOf(pinned) >= 0) {
@@ -155,14 +156,6 @@ function main(config, name) {
       interval: 86400,
       path: "./ruleset/google.yml",
     },
-    Netflix: {
-      type: "http",
-      behavior: "classical",
-      format: "text",
-      url: "https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/netflix.list",
-      interval: 86400,
-      path: "./ruleset/netflix.yml",
-    },
     Telegram: {
       type: "http",
       behavior: "classical",
@@ -181,14 +174,13 @@ function main(config, name) {
     },
   };
 
-  // 7. 设置 rules
+  // 7. 设置 rules（Telegram 对地区无要求，telegram.list 直接跟 Proxy；Netflix 不使用）
   config.rules = [
     "RULE-SET,Direct,DIRECT",
     "RULE-SET,OpenAI,OpenAI",
     "RULE-SET,Claude,Claude",
     "RULE-SET,Google,Google",
-    "RULE-SET,Netflix,Netflix",
-    "RULE-SET,Telegram,Telegram",
+    "RULE-SET,Telegram,Proxy",
     "RULE-SET,Proxy,Proxy",
     "GEOIP,CN,DIRECT",
     "MATCH,Proxy",

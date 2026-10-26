@@ -16,7 +16,8 @@
 
 ;; ============ 配置 ============
 
-(define service-groups '("OpenAI" "Claude" "Google" "Netflix" "Telegram"))
+;; Telegram 对落地地区无要求，跟随 Proxy 即可（telegram.list 规则目标 = Proxy）；Netflix 不使用，无组
+(define service-groups '("OpenAI" "Claude" "Google"))
 
 ;; 服务组默认落地地区：OpenAI/Claude 不对香港开放，钉美国（该地区存在时生效）；其余默认跟随 Proxy
 (define service-default-region

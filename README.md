@@ -15,8 +15,8 @@ Proxy rule lists for **Surge** (iOS/macOS) and **Clash Verge Rev** (Windows). Bo
 | `openai.list` | OpenAI / ChatGPT domains |
 | `claude.list` | Anthropic Claude domains |
 | `google.list` | Google services |
-| `netflix.list` | Netflix streaming |
-| `telegram.list` | Telegram messaging |
+| `netflix.list` | Netflix streaming (not wired into default rules; file kept) |
+| `telegram.list` | Telegram messaging (routed to `Proxy`) |
 
 ## Quick Start
 
@@ -37,8 +37,7 @@ RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/sur
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,OpenAI
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/claude.list,Claude
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Google
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/netflix.list,Netflix
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Telegram
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Proxy
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
 GEOIP,CN,DIRECT
 FINAL,Proxy
@@ -82,7 +81,7 @@ Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group s
 | `Auto` | fallback | regions — first healthy region wins |
 | `SSRDOG` / `MITCE` | url-test | all nodes of that provider |
 | `OpenAI` / `Claude` | select | 🇺🇸 United States default (US-blocked services), then `Proxy`, regions, `DIRECT` |
-| `Google` / `Netflix` / `Telegram` | select | `Proxy`, regions, `DIRECT` |
+| `Google` | select | `Proxy`, regions, `DIRECT` |
 | regions (🇭🇰/🇺🇸/…) | fallback | nodes ordered by provider priority |
 
 Region groups are `fallback`: every primary-provider node is listed ahead of the backup-provider nodes, and traffic only moves to the backup when all primary nodes fail health checks (and moves back on recovery). So when ssrdog's US nodes die, mitce's US nodes take over automatically — no manual re-wiring.

@@ -15,8 +15,8 @@
 | `openai.list` | OpenAI / ChatGPT 域名 |
 | `claude.list` | Anthropic Claude 域名 |
 | `google.list` | Google 服务 |
-| `netflix.list` | Netflix 流媒体 |
-| `telegram.list` | Telegram 即时通讯 |
+| `netflix.list` | Netflix 流媒体（已不接入默认规则，文件保留） |
+| `telegram.list` | Telegram 即时通讯（跟随 `Proxy`） |
 
 ## 快速开始
 
@@ -37,8 +37,7 @@ RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/sur
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,OpenAI
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/claude.list,Claude
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Google
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/netflix.list,Netflix
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Telegram
+RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Proxy
 RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
 GEOIP,CN,DIRECT
 FINAL,Proxy
@@ -82,7 +81,7 @@ FINAL,Proxy
 | `Auto` | fallback | 各地区——第一个健康地区优先 |
 | `SSRDOG` / `MITCE` | url-test | 该订阅全部节点 |
 | `OpenAI` / `Claude` | select | 默认 🇺🇸 United States（不对香港开放的服务），其后 `Proxy`、各地区、`DIRECT` |
-| `Google` / `Netflix` / `Telegram` | select | `Proxy`、各地区、`DIRECT` |
+| `Google` | select | `Proxy`、各地区、`DIRECT` |
 | 各地区组（🇭🇰/🇺🇸/…） | fallback | 节点按 provider 优先级排序 |
 
 地区组是 `fallback`：主用 provider 的节点全部排在备用 provider 节点之前，只有主用节点全部健康检查失败才切到备用，恢复后自动切回。ssrdog 美国节点全挂时，mitce 的美国节点自动顶上，无需手动重接。

@@ -21,7 +21,7 @@ node scripts/test-clash-verge.mjs   # clash-verge.js 单元测试
 
 - 无 CI、无发版：改 `.list` 后直接 push master（默认分支是 master），客户端拉 raw 立即生效——**推送即发布，改规则要克制**。
 - 改 `scripts/` 后必须跑上面两条测试再 push；改动涉及地区识别时额外核对两侧 pattern 同步。
-- 策略组名（OpenAI/Claude/Google/Netflix/Telegram，以及 provider 组名 SSRDOG/MITCE）须与 `sub.rkt` 生成的分组名保持一致。
+- 策略组名（OpenAI/Claude/Google，以及 provider 组名 SSRDOG/MITCE）须与 `sub.rkt` 生成的分组名保持一致；Telegram 走 Proxy 无专用组，Netflix 已移除（netflix.list 文件保留但不接线）。
 
 ## 仓库特定规矩
 
