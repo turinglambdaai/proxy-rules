@@ -59,13 +59,13 @@ EOF
 
 ;; ============ 合并与生成 ============
 
-(define merged (merge-proxies (list (cons "SSRDog" p1) (cons "Mitce" p2))))
+(define merged (merge-proxies (list (cons "SSRDOG" p1) (cons "MITCE" p2))))
 (check-equal? (length merged) 6)
 ;; 首个订阅的名称保持原样，第二个订阅的重名节点改名
 (check-equal? (map proxy-name merged)
               '("🇺🇸 US-01" "🇺🇸 US-02" "🇭🇰 HK-01"
-                "🇺🇸 US-01 | Mitce" "美国 02" "🇯🇵 JP-01"))
-(check-equal? (proxy-provider (fourth merged)) "Mitce")
+                "🇺🇸 US-01 | MITCE" "美国 02" "🇯🇵 JP-01"))
+(check-equal? (proxy-provider (fourth merged)) "MITCE")
 
 (define conf (generate-surge-config merged))
 (define conf-lines (string-split conf "\n"))
@@ -75,31 +75,31 @@ EOF
 
 ;; 节点：主订阅在前、名称保持原样；备用订阅重名节点已改名
 (expect-line "🇺🇸 US-01 = ss, 1.2.3.4, 8388, encrypt-method=aes-256-gcm, password=abc")
-(expect-line "🇺🇸 US-01 | Mitce = ss, 5.6.7.8, 8388, encrypt-method=chacha20-ietf-poly1305, password=xyz")
+(expect-line "🇺🇸 US-01 | MITCE = ss, 5.6.7.8, 8388, encrypt-method=chacha20-ietf-poly1305, password=xyz")
 
 ;; 地区顺序 = 节点首次出现顺序
-(expect-line "Proxy = select, Auto, SSRDog, Mitce, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
+(expect-line "Proxy = select, Auto, SSRDOG, MITCE, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
 (expect-line "Auto = fallback, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, url=http://cp.cloudflare.com/generate_204, interval=300")
 
 ;; provider 组 = 该订阅全部节点（url-test）
-(expect-line "SSRDog = url-test, 🇺🇸 US-01, 🇺🇸 US-02, 🇭🇰 HK-01, url=http://cp.cloudflare.com/generate_204, interval=300")
-(expect-line "Mitce = url-test, 🇺🇸 US-01 | Mitce, 美国 02, 🇯🇵 JP-01, url=http://cp.cloudflare.com/generate_204, interval=300")
+(expect-line "SSRDOG = url-test, 🇺🇸 US-01, 🇺🇸 US-02, 🇭🇰 HK-01, url=http://cp.cloudflare.com/generate_204, interval=300")
+(expect-line "MITCE = url-test, 🇺🇸 US-01 | MITCE, 美国 02, 🇯🇵 JP-01, url=http://cp.cloudflare.com/generate_204, interval=300")
 
 ;; 功能组默认跟随 Proxy，可手动钉地区，DIRECT 收尾
 (expect-line "OpenAI = select, Proxy, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
 (expect-line "Claude = select, Proxy, 🇺🇸 United States, 🇭🇰 Hong Kong, 🇯🇵 Japan, DIRECT")
 
 ;; 地区组 = fallback：主订阅节点在前，备用订阅在后（核心备份语义）
-(expect-line "🇺🇸 United States = fallback, 🇺🇸 US-01, 🇺🇸 US-02, 🇺🇸 US-01 | Mitce, 美国 02, url=http://cp.cloudflare.com/generate_204, interval=300")
+(expect-line "🇺🇸 United States = fallback, 🇺🇸 US-01, 🇺🇸 US-02, 🇺🇸 US-01 | MITCE, 美国 02, url=http://cp.cloudflare.com/generate_204, interval=300")
 (expect-line "🇭🇰 Hong Kong = fallback, 🇭🇰 HK-01, url=http://cp.cloudflare.com/generate_204, interval=300")
 (expect-line "🇯🇵 Japan = fallback, 🇯🇵 JP-01, url=http://cp.cloudflare.com/generate_204, interval=300")
 
 ;; 备用订阅先于主订阅时，地区组节点顺序随之反转（.env 顺序即优先级）
-(define merged2 (merge-proxies (list (cons "Mitce" p2) (cons "SSRDog" p1))))
+(define merged2 (merge-proxies (list (cons "MITCE" p2) (cons "SSRDOG" p1))))
 (define conf2 (generate-surge-config merged2))
 (check-true (string-contains? conf2
-              "🇺🇸 United States = fallback, 🇺🇸 US-01, 美国 02, 🇺🇸 US-01 | SSRDog, 🇺🇸 US-02, url=http://cp.cloudflare.com/generate_204, interval=300"))
-(check-true (string-contains? conf2 "Proxy = select, Auto, Mitce, SSRDog,"))
+              "🇺🇸 United States = fallback, 🇺🇸 US-01, 美国 02, 🇺🇸 US-01 | SSRDOG, 🇺🇸 US-02, url=http://cp.cloudflare.com/generate_204, interval=300"))
+(check-true (string-contains? conf2 "Proxy = select, Auto, MITCE, SSRDOG,"))
 
 ;; ============ 边界情况 ============
 
@@ -107,16 +107,16 @@ EOF
 (check-exn (λ (e) (string-contains? (exn-message e) "没有识别出任何地区"))
            (λ () (generate-surge-config
                   (merge-proxies
-                   (list (cons "SSRDog" (list (proxy "未知节点" "ss, 1.2.3.4, 8388" #f "SSRDog"))))))))
+                   (list (cons "SSRDOG" (list (proxy "未知节点" "ss, 1.2.3.4, 8388" #f "SSRDOG"))))))))
 
 ;; 同订阅内重名：第 2 份改名 "原名 | provider"，第 3 份起带出现序号
 (define dup (merge-proxies
-             (list (cons "SSRDog"
+             (list (cons "SSRDOG"
                          (list (proxy "US-01" "ss, 1.1.1.1, 8388" "🇺🇸 United States" #f)
                                (proxy "US-01" "ss, 2.2.2.2, 8388" "🇺🇸 United States" #f)
                                (proxy "US-01" "ss, 3.3.3.3, 8388" "🇺🇸 United States" #f))))))
 (check-equal? (map proxy-name dup)
-              '("US-01" "US-01 | SSRDog" "US-01 | SSRDog #3"))
+              '("US-01" "US-01 | SSRDOG" "US-01 | SSRDOG #3"))
 
 ;; ============ 重试（等待激活窗口） ============
 

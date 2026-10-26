@@ -21,10 +21,9 @@
 ;; 健康检查参数（url-test / fallback 组共用）
 (define test-params "url=http://cp.cloudflare.com/generate_204, interval=300")
 
-;; provider 显示名映射（键为 SUB_<NAME>_URL 中的 NAME 大写形式，未列出的原样大写显示）
-(define provider-display-map
-  '(("SSRDOG" . "SSRDog")
-    ("MITCE" . "Mitce")))
+;; provider 显示名 = SUB_<NAME>_URL 的 NAME 大写形式（组名全大写，避免大小写混搭）
+(define (provider-display name)
+  (string-upcase name))
 
 ;; 地区识别 pattern（无 flag 的正则源串，与 scripts/clash-verge.js 的 REGIONS 共用，
 ;; 改动须两侧同步；Racket/mihomo 加 "(?i)" 前缀，JS 用 i flag。
@@ -96,11 +95,6 @@
           (when (and (> (string-length key) 0) (> (string-length val) 0))
             (set! entries (append entries (list (cons key val)))))))))
   entries)
-
-(define (provider-display name)
-  (define up (string-upcase name))
-  (cond [(assoc up provider-display-map) => cdr]
-        [else up]))
 
 (define sub-url-rx #rx"^SUB_(.+)_URL$")
 

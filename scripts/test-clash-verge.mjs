@@ -49,7 +49,7 @@ assert.deepEqual(proxyA.proxies, ["Auto", "🇭🇰 Hong Kong", "🇯🇵 Japan"
 const openaiA = byName(groupsA, "OpenAI");
 assert.deepEqual(openaiA.proxies, ["Proxy", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "DIRECT"]);
 
-assert.equal(groupsA.find((g) => g.name === "SSRDog"), undefined, "no provider groups in static-only mode");
+assert.equal(groupsA.find((g) => g.name === "SSRDOG"), undefined, "no provider groups in static-only mode");
 assert.deepEqual(cfgA.rules[cfgA.rules.length - 1], "MATCH,Proxy");
 
 // ── B. 仅 proxy-providers（双订阅） ──
@@ -62,12 +62,12 @@ assert.deepEqual(usB.use, ["ssrdog", "mitce"], "provider order = priority");
 assert.equal(usB.filter, "(?i)(?:^|[^A-Za-z])(?:US|USA)(?: ?[0-9#-]|[^A-Za-z0-9]|$)|United States|Los Angeles|San Jose|Seattle|New York|Chicago|美国|美國|美西|美东|北美|洛杉矶|圣何塞|西雅图|纽约|芝加哥|🇺🇸");
 assert.equal(usB.proxies, undefined);
 
-const ssrB = byName(groupsB, "SSRDog");
+const ssrB = byName(groupsB, "SSRDOG");
 assert.equal(ssrB.type, "url-test");
 assert.deepEqual(ssrB.use, ["ssrdog"]);
 assert.equal(ssrB.interval, 300);
 
-byName(groupsB, "Mitce");
+byName(groupsB, "MITCE");
 
 const proxyB = byName(groupsB, "Proxy");
 // providers-only 模式下脚本无法预知 provider 实际地区，为全部地区建组（filter 过滤，空组无害）
@@ -77,7 +77,7 @@ const allRegions = [
   "🇳🇱 Netherlands", "🇫🇷 France", "🇩🇪 Germany", "🇻🇳 Vietnam", "🇲🇾 Malaysia",
   "🇹🇭 Thailand", "🇵🇭 Philippines", "🇦🇺 Australia", "🇧🇷 Brazil", "🇦🇷 Argentina",
 ];
-assert.deepEqual(proxyB.proxies, ["Auto", "SSRDog", "Mitce", ...allRegions, "DIRECT"]);
+assert.deepEqual(proxyB.proxies, ["Auto", "SSRDOG", "MITCE", ...allRegions, "DIRECT"]);
 assert.equal(proxyB.proxies.includes("🇦🇺 Australia"), true);
 const autoB = byName(groupsB, "Auto");
 assert.deepEqual(autoB.proxies, allRegions);
@@ -94,12 +94,12 @@ const groupsC = cfgC["proxy-groups"];
 const usC = byName(groupsC, "🇺🇸 United States");
 assert.deepEqual(usC.proxies, ["🇺🇸 US-Static"]);
 assert.deepEqual(usC.use, ["mitce"]);
-const mitceC = byName(groupsC, "Mitce");
+const mitceC = byName(groupsC, "MITCE");
 assert.deepEqual(mitceC.use, ["mitce"]);
 
 // ── D. 未知 provider 键名原样显示 ──
 const cfgD = main({ "proxy-providers": { custom1: {} } }, "test");
-byName(cfgD["proxy-groups"], "custom1");
+byName(cfgD["proxy-groups"], "CUSTOM1");
 
 // ── E. 交由 mihomo 的 filter 语法合法（括号平衡，可被 new RegExp 解析） ──
 for (const g of groupsB) {

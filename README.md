@@ -80,13 +80,13 @@ Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group s
 |-------|------|---------|
 | `Proxy` | select | `Auto`, one group per provider, regions, `DIRECT` |
 | `Auto` | fallback | regions — first healthy region wins |
-| `SSRDog` / `Mitce` | url-test | all nodes of that provider |
+| `SSRDOG` / `MITCE` | url-test | all nodes of that provider |
 | `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`, regions, `DIRECT` |
 | regions (🇭🇰/🇺🇸/…) | fallback | nodes ordered by provider priority |
 
 Region groups are `fallback`: every primary-provider node is listed ahead of the backup-provider nodes, and traffic only moves to the backup when all primary nodes fail health checks (and moves back on recovery). So when ssrdog's US nodes die, mitce's US nodes take over automatically — no manual re-wiring.
 
-**Clash Verge Rev with multiple subscriptions**: Clash Verge merges one subscription profile at a time, so put both subscriptions into the global Merge config as `proxy-providers` (keys must be `ssrdog` and `mitce` to match the display-name map in `clash-verge.js`; URLs stay in this local file, never committed):
+**Clash Verge Rev with multiple subscriptions**: Clash Verge merges one subscription profile at a time, so put both subscriptions into the global Merge config as `proxy-providers` (use lowercase keys `ssrdog` and `mitce`; they are displayed uppercased as `SSRDOG`/`MITCE`. URLs stay in this local file, never committed):
 
 ```yaml
 proxy-providers:
@@ -95,14 +95,14 @@ proxy-providers:
     path: ./providers/ssrdog.yaml
     interval: 86400
     override:
-      additional-prefix: "[SSRDog] "
+      additional-prefix: "[SSRDOG] "
     health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
   mitce:
     url: "https://mitce-subscription-url"
     path: ./providers/mitce.yaml
     interval: 86400
     override:
-      additional-prefix: "[Mitce] "
+      additional-prefix: "[MITCE] "
     health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
 ```
 

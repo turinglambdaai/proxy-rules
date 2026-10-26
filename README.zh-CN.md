@@ -80,13 +80,13 @@ FINAL,Proxy
 |--------|------|------|
 | `Proxy` | select | `Auto`、各 provider 组、各地区、`DIRECT` |
 | `Auto` | fallback | 各地区——第一个健康地区优先 |
-| `SSRDog` / `Mitce` | url-test | 该订阅全部节点 |
+| `SSRDOG` / `MITCE` | url-test | 该订阅全部节点 |
 | `OpenAI` / `Claude` / `Google` / `Netflix` / `Telegram` | select | `Proxy`、各地区、`DIRECT` |
 | 各地区组（🇭🇰/🇺🇸/…） | fallback | 节点按 provider 优先级排序 |
 
 地区组是 `fallback`：主用 provider 的节点全部排在备用 provider 节点之前，只有主用节点全部健康检查失败才切到备用，恢复后自动切回。ssrdog 美国节点全挂时，mitce 的美国节点自动顶上，无需手动重接。
 
-**Clash Verge Rev 多订阅**：Verge 一次只合并一个订阅 profile，所以把两个订阅写进全局扩展配置（Merge）的 `proxy-providers`（键名须为 `ssrdog` 和 `mitce`，与 `clash-verge.js` 的显示名映射对应；链接只存在本机 Merge 文件里，不入仓库）：
+**Clash Verge Rev 多订阅**：Verge 一次只合并一个订阅 profile，所以把两个订阅写进全局扩展配置（Merge）的 `proxy-providers`（键名建议用小写 `ssrdog` 和 `mitce`，策略组显示为全大写 `SSRDOG`/`MITCE`；链接只存在本机 Merge 文件里，不入仓库）：
 
 ```yaml
 proxy-providers:
@@ -95,14 +95,14 @@ proxy-providers:
     path: ./providers/ssrdog.yaml
     interval: 86400
     override:
-      additional-prefix: "[SSRDog] "
+      additional-prefix: "[SSRDOG] "
     health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
   mitce:
     url: "https://mitce-订阅地址"
     path: ./providers/mitce.yaml
     interval: 86400
     override:
-      additional-prefix: "[Mitce] "
+      additional-prefix: "[MITCE] "
     health-check: { enable: true, url: "http://cp.cloudflare.com/generate_204", interval: 300 }
 ```
 

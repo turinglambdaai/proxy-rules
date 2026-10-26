@@ -35,12 +35,9 @@ const REGIONS = [
 const TEST_URL = "http://cp.cloudflare.com/generate_204";
 const INTERVAL = 300;
 
-// proxy-providers 键名 → 策略组显示名；未列出的键原样显示
-// （provider 在 Merge 里的书写顺序 = 优先级，与 Surge 侧 .env 顺序对应）
-const PROVIDER_DISPLAY = { ssrdog: "SSRDog", mitce: "Mitce" };
-
+// provider 策略组显示名 = 键名全大写（避免大小写混搭；键建议用小写 ssrdog/mitce）
 function providerDisplayName(key) {
-  return PROVIDER_DISPLAY[String(key).toLowerCase()] || String(key);
+  return String(key).toUpperCase();
 }
 
 // ── 从静态节点中筛选匹配某正则的节点名 ──
