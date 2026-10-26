@@ -315,9 +315,12 @@
 
   (printf "1. 正在下载并解析订阅...\n")
   (printf "   （临时订阅链接请先到面板激活；未激活/限流/坏副本会自动等待重试，约 90s 窗口）\n")
+  ;; 长等待场景可用环境变量放宽：SUB_RETRY_ATTEMPTS / SUB_RETRY_INTERVAL（秒）
+  (define retry-attempts (or (and (getenv "SUB_RETRY_ATTEMPTS") (string->number (getenv "SUB_RETRY_ATTEMPTS"))) 15))
+  (define retry-interval (or (and (getenv "SUB_RETRY_INTERVAL") (string->number (getenv "SUB_RETRY_INTERVAL"))) 6))
   (define results
     (for/list ([s (in-list subs)])
-      (retry-with-backoff (sub-display s) 15 6
+      (retry-with-backoff (sub-display s) retry-attempts retry-interval
         (λ ()
           (printf "   [~a] 下载中...\n" (sub-display s))
           (define content (fetch-url (sub-url s)))
