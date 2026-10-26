@@ -294,21 +294,30 @@
     (printf "订阅 [~a]: ~a\n" (sub-display s) (sub-url s)))
   (printf "\n")
 
-  (printf "1. 正在下载并解析订阅（单个失败自动跳过）...\n")
+  (printf "1. 正在下载并解析订阅（单个失败自动跳过，每订阅最多重试 3 次）...\n")
+  ;; 部分面板多后端副本不一致，可能偶发返回空 [Proxy]，重试即可恢复
+  (define (try-sub s attempt)
+    (with-handlers
+        ([exn:fail?
+          (λ (e)
+            (if (< attempt 3)
+                (begin
+                  (printf "   [~a] 重试 (~a/3): ~a\n" (sub-display s) (add1 attempt) (exn-message e))
+                  (try-sub s (add1 attempt)))
+                (begin
+                  (printf "   ⚠ [~a] 跳过: ~a\n" (sub-display s) (exn-message e))
+                  #f)))])
+      (printf "   [~a] 下载中...\n" (sub-display s))
+      (define content (fetch-url (sub-url s)))
+      (printf "   [~a] ✓ 下载完成 (~a 字节)\n" (sub-display s) (string-length content))
+      (define proxies (parse-subscription content))
+      (when (null? proxies)
+        (error "未解析出节点（该订阅可能不是 Surge 格式）"))
+      (printf "   [~a] ✓ 解析出 ~a 个节点\n" (sub-display s) (length proxies))
+      (cons (sub-display s) proxies)))
   (define results
     (for/list ([s (in-list subs)])
-      (with-handlers ([exn:fail?
-                       (λ (e)
-                         (printf "   ⚠ [~a] 跳过: ~a\n" (sub-display s) (exn-message e))
-                         #f)])
-        (printf "   [~a] 下载中...\n" (sub-display s))
-        (define content (fetch-url (sub-url s)))
-        (printf "   [~a] ✓ 下载完成 (~a 字节)\n" (sub-display s) (string-length content))
-        (define proxies (parse-subscription content))
-        (when (null? proxies)
-          (error "未解析出节点（该订阅可能不是 Surge 格式）"))
-        (printf "   [~a] ✓ 解析出 ~a 个节点\n" (sub-display s) (length proxies))
-        (cons (sub-display s) proxies))))
+      (try-sub s 1)))
   (define ok (filter values results))
   (when (null? ok)
     (error "全部订阅下载/解析失败，中止生成"))
