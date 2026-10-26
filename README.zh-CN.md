@@ -70,6 +70,8 @@ FINAL,Proxy
 
    输出完整 Surge 配置到 `surge/surge.conf`。单个订阅下载/解析失败只告警跳过，全部失败才中止。
 
+**临时订阅链接**：部分面板不提供长期订阅，只给手动激活后短时效的分享链接（如 mitce 激活后 60 秒、ssrdog 5 分钟）。生成器对此的处理：`scripts/.env` 里的 URL 保持不变——先跑 `racket scripts/sub.rkt`，再去各面板点激活，脚本每 6 秒自动重试约 90 秒，抓取会自动落在激活窗口内，不用复制粘贴链接。
+
 ### 多订阅备份切换
 
 `sub.rkt`（Surge）与 `clash-verge.js`（Clash Verge）生成同构的策略组：

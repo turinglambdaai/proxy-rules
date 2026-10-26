@@ -70,6 +70,8 @@ Generate a full Surge configuration from one or more subscription URLs using `sc
 
    This outputs a complete Surge config to `surge/surge.conf`. A failed subscription is skipped with a warning; generation only aborts when all subscriptions fail.
 
+**Short-lived subscription links**: some panels hand out share links that stay valid only briefly (e.g. 60s after each manual activation) instead of permanent subscription URLs. The generator handles this: the URLs in `scripts/.env` stay the same — run `racket scripts/sub.rkt` first, then activate the links in each panel; the script retries every 6s for ~90s, so the fetch lands inside the activation window automatically.
+
 ### Multi-provider failover
 
 Both `sub.rkt` (Surge) and `clash-verge.js` (Clash Verge) build the same group structure:

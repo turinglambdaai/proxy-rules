@@ -275,6 +275,25 @@
   (when (> (length proxies) 5)
     (printf "  ... 还有 ~a 个节点\n" (- (length proxies) 5))))
 
+;; ============ 重试 ============
+;; 面板的三种失败都靠重试解决：多后端坏副本、限流 403、临时链接未激活。
+;; 失败后间隔 interval 秒重试，最多 max-attempts 次（默认留出 ~90s 等待激活窗口）。
+;; 全部失败返回 #f；thunk 成功时返回其结果。
+(define (retry-with-backoff display max-attempts interval thunk)
+  (let loop ([n 1])
+    (with-handlers
+        ([exn:fail?
+          (λ (e)
+            (if (< n max-attempts)
+                (begin
+                  (printf "   [~a] 未就绪，重试 (~a/~a): ~a\n" display n max-attempts (exn-message e))
+                  (sleep interval)
+                  (loop (add1 n)))
+                (begin
+                  (printf "   ⚠ [~a] 跳过: ~a\n" display (exn-message e))
+                  #f)))])
+      (thunk))))
+
 ;; ============ 模板 ============
 (define (read-template)
   (define template-path (build-path script-dir "surge-template.conf"))
@@ -294,30 +313,20 @@
     (printf "订阅 [~a]: ~a\n" (sub-display s) (sub-url s)))
   (printf "\n")
 
-  (printf "1. 正在下载并解析订阅（单个失败自动跳过，每订阅最多重试 3 次）...\n")
-  ;; 部分面板多后端副本不一致，可能偶发返回空 [Proxy]，重试即可恢复
-  (define (try-sub s attempt)
-    (with-handlers
-        ([exn:fail?
-          (λ (e)
-            (if (< attempt 3)
-                (begin
-                  (printf "   [~a] 重试 (~a/3): ~a\n" (sub-display s) (add1 attempt) (exn-message e))
-                  (try-sub s (add1 attempt)))
-                (begin
-                  (printf "   ⚠ [~a] 跳过: ~a\n" (sub-display s) (exn-message e))
-                  #f)))])
-      (printf "   [~a] 下载中...\n" (sub-display s))
-      (define content (fetch-url (sub-url s)))
-      (printf "   [~a] ✓ 下载完成 (~a 字节)\n" (sub-display s) (string-length content))
-      (define proxies (parse-subscription content))
-      (when (null? proxies)
-        (error "未解析出节点（该订阅可能不是 Surge 格式）"))
-      (printf "   [~a] ✓ 解析出 ~a 个节点\n" (sub-display s) (length proxies))
-      (cons (sub-display s) proxies)))
+  (printf "1. 正在下载并解析订阅...\n")
+  (printf "   （临时订阅链接请先到面板激活；未激活/限流/坏副本会自动等待重试，约 90s 窗口）\n")
   (define results
     (for/list ([s (in-list subs)])
-      (try-sub s 1)))
+      (retry-with-backoff (sub-display s) 15 6
+        (λ ()
+          (printf "   [~a] 下载中...\n" (sub-display s))
+          (define content (fetch-url (sub-url s)))
+          (printf "   [~a] ✓ 下载完成 (~a 字节)\n" (sub-display s) (string-length content))
+          (define proxies (parse-subscription content))
+          (when (null? proxies)
+            (error "未解析出节点（该订阅可能不是 Surge 格式，或链接未激活）"))
+          (printf "   [~a] ✓ 解析出 ~a 个节点\n" (sub-display s) (length proxies))
+          (cons (sub-display s) proxies)))))
   (define ok (filter values results))
   (when (null? ok)
     (error "全部订阅下载/解析失败，中止生成"))

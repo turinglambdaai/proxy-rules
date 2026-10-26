@@ -118,4 +118,18 @@ EOF
 (check-equal? (map proxy-name dup)
               '("US-01" "US-01 | SSRDog" "US-01 | SSRDog #3"))
 
+;; ============ 重试（等待激活窗口） ============
+
+(define attempts (box 0))
+(check-equal?
+ (retry-with-backoff "测试" 3 0
+                     (λ ()
+                       (set-box! attempts (add1 (unbox attempts)))
+                       (if (< (unbox attempts) 3)
+                           (error "模拟失败")
+                           'ok)))
+ 'ok)  ;; 第 3 次成功
+(check-equal? (unbox attempts) 3)
+(check-false (retry-with-backoff "测试" 2 0 (λ () (error "始终失败"))))  ;; 耗尽后返回 #f
+
 (printf "sub.rkt tests passed\n")
