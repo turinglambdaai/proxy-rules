@@ -4,3 +4,4 @@
 scripts/.env
 scripts/surge-template.conf
 surge/surge.conf
+scripts/clash-verge-merge.local.yaml
