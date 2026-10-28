@@ -15,6 +15,7 @@
 (check-equal? (get-region "🇯🇵 JP-01") "🇯🇵 Japan")
 (check-equal? (get-region "AUS-01") "🇦🇺 Australia")              ;; 边界回归：不得误判为 US
 (check-equal? (get-region "TR-Edge-01") "🇹🇷 Turkey")
+(check-equal? (get-region "🇳🇬 AnyTLS.NG 01") "🇳🇬 Nigeria")
 (check-false (get-region "IPLC专线"))
 
 ;; ============ 信息节点过滤 ============
@@ -23,6 +24,9 @@
 (check-false (parse-proxy-line "Expire: 2026-12-31 = ss, 1.2.3.9, 8388"))
 (check-false (parse-proxy-line "Traffic Reset = ss, 1.2.3.9, 8388"))
 (check-false (parse-proxy-line "套餐到期 = ss, 1.2.3.9, 8388"))
+;; 面板公告伪装的回环假节点（ouo 实测：公告行指向 127.0.0.1:10000，名字无规律可匹配）
+(check-false (parse-proxy-line "⚠️ 确认客户端为最新版本 = ss,127.0.0.1,10000,encrypt-method=aes-128-gcm,password=abc"))
+(check-false (parse-proxy-line "🇬🇧 SS协议已弃用 = ss,localhost,8388,encrypt-method=aes-256-gcm,password=abc"))
 (check-not-false (parse-proxy-line "🇺🇸 US-01 = ss, 1.2.3.4, 8388, encrypt-method=aes-256-gcm, password=abc"))
 
 ;; ============ 订阅解析 ============

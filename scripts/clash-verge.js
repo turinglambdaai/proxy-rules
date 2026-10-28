@@ -30,6 +30,7 @@ const REGIONS = [
   { name: "🇦🇺 Australia",     pattern: "(?:^|[^A-Za-z])(?:AU|AUS)(?: ?[0-9#-]|[^A-Za-z0-9]|$)|Australia|Sydney|Melbourne|澳大利亚|澳洲|澳大利亞|悉尼|墨尔本|🇦🇺" },
   { name: "🇧🇷 Brazil",        pattern: "(?:^|[^A-Za-z])(?:BR|BRA)(?: ?[0-9#-]|[^A-Za-z0-9]|$)|Brazil|巴西|圣保罗|🇧🇷" },
   { name: "🇦🇷 Argentina",     pattern: "(?:^|[^A-Za-z])(?:AR|ARG)(?: ?[0-9#-]|[^A-Za-z0-9]|$)|Argentina|阿根廷|🇦🇷" },
+  { name: "🇳🇬 Nigeria",       pattern: "(?:^|[^A-Za-z])(?:NG|NGA)(?: ?[0-9#-]|[^A-Za-z0-9]|$)|Nigeria|尼日利亚|尼日利亞|🇳🇬" },
 ];
 
 const TEST_URL = "http://cp.cloudflare.com/generate_204";

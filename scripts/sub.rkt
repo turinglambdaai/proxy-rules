@@ -60,7 +60,8 @@
    (cons (make-region-pattern '("PH" "PHL") '("Philippines" "马尼拉" "菲律宾" "菲律賓" "🇵🇭")) "🇵🇭 Philippines")
    (cons (make-region-pattern '("AU" "AUS") '("Australia" "Sydney" "Melbourne" "澳大利亚" "澳洲" "澳大利亞" "悉尼" "墨尔本" "🇦🇺")) "🇦🇺 Australia")
    (cons (make-region-pattern '("BR" "BRA") '("Brazil" "巴西" "圣保罗" "🇧🇷")) "🇧🇷 Brazil")
-   (cons (make-region-pattern '("AR" "ARG") '("Argentina" "阿根廷" "🇦🇷")) "🇦🇷 Argentina")))
+   (cons (make-region-pattern '("AR" "ARG") '("Argentina" "阿根廷" "🇦🇷")) "🇦🇷 Argentina")
+   (cons (make-region-pattern '("NG" "NGA") '("Nigeria" "尼日利亚" "尼日利亞" "🇳🇬")) "🇳🇬 Nigeria")))
 
 ;; 预编译：Racket PCRE 要求模式作用域写法 (?i:...)（JS 用 i flag、mihomo/Go 用 "(?i)" 前缀，见 clash-verge.js）
 (define region-map
@@ -70,6 +71,10 @@
 ;; 订阅附带的流量/到期信息行，不入节点列表
 (define traffic-info-rx
   (regexp "(?i:GB \\||Traffic|Expire|剩余|流量|到期|過期|过期|官网|官網|套餐|重置)"))
+
+;; 面板会把公告伪装成指向回环地址的假节点（如 ouo 的 127.0.0.1:10000 公告行），
+;; 真节点不可能监听回环地址，按 body 丢弃
+(define loopback-rx (regexp "(?i:127\\.0\\.0\\.1|localhost)"))
 
 (define script-dir
   (let-values ([(base name dir?) (split-path (path->complete-path (find-system-path 'run-file) (find-system-path 'orig-dir)))])
@@ -184,10 +189,12 @@
 (define (parse-proxy-line line)
   (define idx (string-idx line #\=))
   (and idx
-       (let ([name (string-trim (substring line 0 idx))])
+       (let ([name (string-trim (substring line 0 idx))]
+             [body (string-trim (substring line (+ idx 1)))])
          (and (not (string=? name ""))
               (not (regexp-match? traffic-info-rx name))
-              (proxy name (string-trim (substring line (+ idx 1))) (get-region name) #f)))))
+              (not (regexp-match? loopback-rx body))
+              (proxy name body (get-region name) #f)))))
 
 (define (extract-section lines section-name)
   (define (is-section-header? line)

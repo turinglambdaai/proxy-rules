@@ -24,6 +24,7 @@ const cfgA = main(
       { name: "美国 IEPL-02" },
       { name: "🇯🇵 JP-01" },
       { name: "AUS-01" }, // 边界回归：必须进 Australia，不得误判为 US
+      { name: "🇳🇬 NG-01" },
     ],
   },
   "test",
@@ -39,15 +40,18 @@ assert.equal(usA.filter, undefined, "static-only group must not carry filter");
 const auA = byName(groupsA, "🇦🇺 Australia");
 assert.deepEqual(auA.proxies, ["AUS-01"]);
 
+const ngA = byName(groupsA, "🇳🇬 Nigeria");
+assert.deepEqual(ngA.proxies, ["🇳🇬 NG-01"]);
+
 const autoA = byName(groupsA, "Auto");
 assert.equal(autoA.type, "fallback");
-assert.deepEqual(autoA.proxies, ["🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia"]);
+assert.deepEqual(autoA.proxies, ["🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "🇳🇬 Nigeria"]);
 
 const proxyA = byName(groupsA, "Proxy");
-assert.deepEqual(proxyA.proxies, ["Auto", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "DIRECT"]);
+assert.deepEqual(proxyA.proxies, ["Auto", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇺🇸 United States", "🇦🇺 Australia", "🇳🇬 Nigeria", "DIRECT"]);
 
 const openaiA = byName(groupsA, "OpenAI");
-assert.deepEqual(openaiA.proxies, ["🇺🇸 United States", "Proxy", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇦🇺 Australia", "DIRECT"]);
+assert.deepEqual(openaiA.proxies, ["🇺🇸 United States", "Proxy", "🇭🇰 Hong Kong", "🇯🇵 Japan", "🇦🇺 Australia", "🇳🇬 Nigeria", "DIRECT"]);
 
 assert.equal(groupsA.find((g) => g.name === "SSRDOG"), undefined, "no provider groups in static-only mode");
 assert.deepEqual(cfgA.rules[cfgA.rules.length - 1], "MATCH,Proxy");
@@ -76,6 +80,7 @@ const allRegions = [
   "🇰🇷 Korea", "🇨🇦 Canada", "🇬🇧 Great Britain", "🇹🇷 Turkey", "🇮🇳 India",
   "🇳🇱 Netherlands", "🇫🇷 France", "🇩🇪 Germany", "🇻🇳 Vietnam", "🇲🇾 Malaysia",
   "🇹🇭 Thailand", "🇵🇭 Philippines", "🇦🇺 Australia", "🇧🇷 Brazil", "🇦🇷 Argentina",
+  "🇳🇬 Nigeria",
 ];
 assert.deepEqual(proxyB.proxies, ["Auto", "SSRDOG", "MITCE", ...allRegions, "DIRECT"]);
 assert.equal(proxyB.proxies.includes("🇦🇺 Australia"), true);
