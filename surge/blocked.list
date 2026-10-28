@@ -5,9 +5,6 @@
 # ---- Immersive Translate ----
 DOMAIN-SUFFIX,immersivetranslate.com
 
-# ---- GLM ----
-DOMAIN-SUFFIX,z.ai
-
 # ---- AI Services ----
 DOMAIN-SUFFIX,huggingface.co
 DOMAIN-SUFFIX,hf.co
