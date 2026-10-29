@@ -22,7 +22,7 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/turinglambdaai/proxy-rules.git
+git clone https://github.com/turlamai/proxy-rules.git
 cd proxy-rules
 ```
 
@@ -32,12 +32,12 @@ cd proxy-rules
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/unblock.list,DIRECT
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/openai.list,OpenAI
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/claude.list,Claude
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/google.list,Google
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/telegram.list,Proxy
-RULE-SET,https://raw.githubusercontent.com/turinglambdaai/proxy-rules/master/surge/blocked.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/unblock.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/openai.list,OpenAI
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/claude.list,Claude
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/google.list,Google
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/telegram.list,Proxy
+RULE-SET,https://raw.githubusercontent.com/turlamai/proxy-rules/master/surge/blocked.list,Proxy
 GEOIP,CN,DIRECT
 FINAL,Proxy
 ```
